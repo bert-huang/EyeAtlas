@@ -26,7 +26,6 @@ public class ImageViewerActivity extends Activity {
     private float[] detailLevels;
 
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,9 +33,10 @@ public class ImageViewerActivity extends Activity {
         this.unpackBundle(savedInstanceState);
 
         tileView = new TileView( this );
+        tileView.setCacheEnabled( true );
         setContentView( tileView );
-
         tileView.setBackgroundColor(Color.BLACK);
+        tileView.disableSuppress();
 
         // size of original image at 100% scale
         tileView.setSize(imageSizeX, imageSizeY );
