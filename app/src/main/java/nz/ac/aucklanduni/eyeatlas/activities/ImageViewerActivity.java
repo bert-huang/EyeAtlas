@@ -1,4 +1,4 @@
-package nz.ac.aucklanduni.eyeatlas;
+package nz.ac.aucklanduni.eyeatlas.activities;
 
 import android.app.Activity;
 import android.content.res.AssetManager;
