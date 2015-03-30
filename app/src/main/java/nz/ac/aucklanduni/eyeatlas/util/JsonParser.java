@@ -7,25 +7,13 @@ import org.json.JSONObject;
 
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
 
 
 public class JsonParser {
 
-    public static void jsonToMap(String filePath, Context context) throws JSONException {
-
-
-        HashMap<String, String> map = new HashMap<String, String>();
+    public static JSONObject getJsonObject(String filePath, Context context) throws JSONException {
         JSONObject jObject = new JSONObject(FileReader.getFileContent(filePath, context));
-        Iterator<?> keys = jObject.keys();
-
-        while( keys.hasNext() ){
-            String key = (String)keys.next();
-            String value = jObject.getString(key);
-            map.put(key, value);
-
-        }
-
-        System.out.println("json : "+jObject);
-        System.out.println("map : "+map);
+        return jObject;
     }
 }
