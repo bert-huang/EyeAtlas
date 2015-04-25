@@ -15,3 +15,7 @@
 #-keepclassmembers class fqcn.of.javascript.interface.for.webview {
 #   public *;
 #}
+
+-keep public class org.joda.time.** {public private protected *;}
+-dontwarn org.joda.time.**
+-dontwarn org.codehaus.jackson.map.ext.**
