@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/NavigationDrawer"
+    android:layout_width="320dp"
+    android:layout_height="fill_parent"
+    android:orientation="vertical"
+    android:layout_gravity="left"
+    android:background="@color/lightgrey">
+
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="178dp"
+        android:background="@drawable/congruent_outline"
+        android:orientation="vertical"
+        android:weightSum="1">
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:orientation="vertical"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true">
+
+            <TextView
+                android:id="@+id/title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:textColor="@color/white"
+                android:text="Eye Atlas"
+                android:textSize="14sp"
+                android:textStyle="bold"
+
+                />
+        </LinearLayout>
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:src="@mipmap/ic_launcher"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="38dp"
+            android:id="@+id/circleView"
+            />
+    </RelativeLayout>
+
+    <ListView
+        android:id="@+id/NavigationDrawerList"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:scrollbars="vertical">
+    </ListView>
+
+</LinearLayout>

@@ -1,7 +1,16 @@
 <resources>
-    <string name="app_name">EyeAtlas</string>
+    <string name="app_name">Eye Atlas Demo</string>
 
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
-    <string name="title_activity_image_viewer">ImageViewerActivity</string>
+    <string name="openDrawer">OpenDrawer</string>
+    <string name="closeDrawer">CloseDrawer</string>
+    <string name="gallery">Gallery</string>
+    <string name="index">Index</string>
+
+    <string-array name="nav_drawer_list">
+        <item>@string/gallery</item>
+        <item>@string/index</item>
+    </string-array>
+
 </resources>
