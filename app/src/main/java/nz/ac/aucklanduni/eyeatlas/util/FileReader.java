@@ -39,8 +39,7 @@ public class FileReader {
         return out.toString();
     }
 
-    static InputStream fileStreamProvider(String filePath, Context context) throws IOException {
+    public static InputStream fileStreamProvider(String filePath, Context context) throws IOException {
         return context.getAssets().open(filePath);
     }
-
 }
