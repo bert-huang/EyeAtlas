@@ -41,6 +41,30 @@ public class ConditionAdapter<T> extends ArrayAdapter {
     }
 
     @Override
+    public Condition getItem(final int position) {
+
+        if (conditions[position] == null) {
+            AsyncTask task = new AsyncTask<Object, Object, Object>() {
+                @Override
+                protected Object doInBackground(Object... params) {
+                    ConditionAdapter.this.getConditionNames(position);
+                    return null;
+                }
+            }.execute();
+
+            try {
+                Object wait = task.get(5, TimeUnit.SECONDS);
+            } catch (TimeoutException | ExecutionException | InterruptedException e) {
+                e.printStackTrace();
+                //Display popup and shut down the app
+                throw new RuntimeException("Condition count could not be obtained");
+            }
+        }
+
+        return conditions[position];
+    }
+
+    @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         LayoutInflater inflator = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View rowView = inflator.inflate(R.layout.condition_item, parent, false);
