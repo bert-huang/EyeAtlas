@@ -79,21 +79,22 @@ public class ConditionAdapter<T> extends ArrayAdapter {
     }
 
     private void initialiseCondition(final int position, final TextView textView, final ImageView imageView) {
-        new AsyncTask<Object, Object, String>() {
+        new AsyncTask<Object, Object, Integer>() {
             @Override
-            protected String doInBackground(Object... params) {
+            protected Integer doInBackground(Object... params) {
                 if (conditions[position] == null) {
                     ConditionAdapter.this.getConditionNames(position);
                 }
 
-                String title = conditions[position].getTitle();
-                return title;
+                return position;
             }
 
             @Override
-            protected void onPostExecute(String result) {
-                textView.setText(result);
-                ConditionAdapter.this.setImage(imageView, result);
+            protected void onPostExecute(Integer result) {
+                String title = conditions[result].getTitle();
+                int id = conditions[result].getId();
+                textView.setText(title);
+                ConditionAdapter.this.setImage(imageView, id);
             }
         }.execute();
     }
@@ -123,13 +124,13 @@ public class ConditionAdapter<T> extends ArrayAdapter {
         }
     }
 
-    private void setImage(final ImageView imageView, final String name) {
+    private void setImage(final ImageView imageView, final int id) {
         new AsyncTask<Object, Object, Bitmap>() {
             @Override
             protected Bitmap doInBackground(Object... params) {
                 Bitmap bmp;
                 try {
-                    bmp = S3ImageAdapter.getThumbnail(name, Properties.getInstance(ConditionAdapter.this.getContext()));
+                    bmp = S3ImageAdapter.getThumbnail(id, Properties.getInstance(ConditionAdapter.this.getContext()));
                 } catch (Exception e) {
                     e.printStackTrace();
                     //Display popup and shut down the app

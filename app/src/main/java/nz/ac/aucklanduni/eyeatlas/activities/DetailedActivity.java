@@ -64,10 +64,10 @@ public class DetailedActivity extends AppCompatActivity {
     private void initialiseContent(Condition condition, ImageView imageView, TextView title, TextView detail) {
         title.setText(condition.getTitle());
         detail.setText(condition.getDescription());
-        this.setImage(condition.getTitle(), imageView);
+        this.setImage(condition.getId(), imageView);
     }
 
-    private void setImage(final String id, final ImageView imageView) {
+    private void setImage(final int id, final ImageView imageView) {
         new AsyncTask<Object, Object, Bitmap>() {
             @Override
             protected Bitmap doInBackground(Object... params) {
