@@ -18,6 +18,7 @@ import android.widget.Toast;
 
 import nz.ac.aucklanduni.eyeatlas.R;
 import nz.ac.aucklanduni.eyeatlas.adapter.NavigationDrawerListAdapter;
+import nz.ac.aucklanduni.eyeatlas.listeners.NavigationDrawerListListener;
 import nz.ac.aucklanduni.eyeatlas.model.Condition;
 import nz.ac.aucklanduni.eyeatlas.model.Properties;
 import nz.ac.aucklanduni.eyeatlas.util.S3ImageAdapter;
@@ -35,12 +36,14 @@ public class DetailedActivity extends AppCompatActivity {
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        initialiseDrawer();
+
         NavigationDrawerListAdapter adapter = new NavigationDrawerListAdapter(this, R.id.NavigationDrawerList);
+        NavigationDrawerListListener listener = new NavigationDrawerListListener(this, drawer);
         ListView listView = (ListView) findViewById(R.id.NavigationDrawerList);
+        listView.setOnItemClickListener(listener);
         listView.setAdapter(adapter);
         listView.setClickable(true);
-
-        initialiseDrawer();
 
         ImageView imageView = (ImageView) findViewById(R.id.detail_image);
         TextView title = (TextView) findViewById(R.id.detail_title);

@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.ListView;
 import nz.ac.aucklanduni.eyeatlas.R;
 import nz.ac.aucklanduni.eyeatlas.adapter.NavigationDrawerListAdapter;
+import nz.ac.aucklanduni.eyeatlas.listeners.NavigationDrawerListListener;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -25,13 +26,14 @@ public class MainActivity extends AppCompatActivity {
 
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        initialiseDrawer();
 
         NavigationDrawerListAdapter adapter = new NavigationDrawerListAdapter(this, R.id.NavigationDrawerList);
+        NavigationDrawerListListener listener = new NavigationDrawerListListener(this, drawer);
         ListView listView = (ListView) findViewById(R.id.NavigationDrawerList);
         listView.setAdapter(adapter);
+        listView.setOnItemClickListener(listener);
         listView.setClickable(true);
-
-        initialiseDrawer();
     }
 
     @Override
@@ -69,6 +71,15 @@ public class MainActivity extends AppCompatActivity {
         };
         drawer.setDrawerListener(mDrawerToggle);
         mDrawerToggle.syncState();
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (getFragmentManager().getBackStackEntryCount() > 0 ){
+            getFragmentManager().popBackStack();
+        } else {
+            super.onBackPressed();
+        }
     }
 
 }
