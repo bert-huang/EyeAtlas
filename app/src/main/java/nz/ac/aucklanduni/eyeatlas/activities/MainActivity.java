@@ -34,6 +34,9 @@ public class MainActivity extends AppCompatActivity {
         listView.setAdapter(adapter);
         listView.setOnItemClickListener(listener);
         listView.setClickable(true);
+
+        GalleryFragment galleryFragment = new GalleryFragment();
+        this.getFragmentManager().beginTransaction().replace(R.id.fragment_container, galleryFragment).addToBackStack(null).commit();
     }
 
     @Override
@@ -75,7 +78,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        if (getFragmentManager().getBackStackEntryCount() > 0 ){
+        if (getFragmentManager().getBackStackEntryCount() > 1 ){
             getFragmentManager().popBackStack();
         } else {
             super.onBackPressed();

@@ -8,7 +8,7 @@
 
 
     <LinearLayout
-        android:id="@+id/fragment_container"
+        android:id="@+id/body_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
@@ -19,11 +19,13 @@
             layout="@layout/toolbar">
         </include>
 
-        <fragment android:name="nz.ac.aucklanduni.eyeatlas.activities.GalleryFragment"
-            android:id="@+id/headlines_fragment"
-            android:layout_weight="1"
+        <LinearLayout
+            android:id="@+id/fragment_container"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent">
+        </LinearLayout>
+
+
     </LinearLayout>
 
     <include layout="@layout/navigation_drawer" />

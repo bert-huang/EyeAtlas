@@ -6,11 +6,11 @@ import java.util.Set;
 
 public class Condition implements Serializable {
 
+    private Integer id;
     private String title;
     private String description;
     private Category category;
     private Set<Tag> tags = new HashSet<Tag>();
-    private Integer id;
 
     public Integer getId() {
         return id;
