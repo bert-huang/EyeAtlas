@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:background="@color/colourPrimary"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:id="@+id/progressBarContainer"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:visibility="gone" >
+
+        <ProgressBar
+            android:id="@+id/progressBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" >
+        </ProgressBar>
+    </LinearLayout>
+
+    <GridView
+        android:id="@+id/grid"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:numColumns="1"
+        android:scrollingCache="true"
+        android:smoothScrollbar="true"
+        android:clipChildren="true"
+        android:horizontalSpacing="0dp"
+        android:verticalSpacing="0dp"
+        android:background="@color/colourPrimary"
+        android:stretchMode="columnWidth"
+        android:gravity="center">
+    </GridView>
+
+</LinearLayout>

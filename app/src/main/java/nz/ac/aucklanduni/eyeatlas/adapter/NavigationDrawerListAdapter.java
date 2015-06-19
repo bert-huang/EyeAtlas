@@ -1,20 +1,16 @@
 package nz.ac.aucklanduni.eyeatlas.adapter;
 
 
-import android.app.Activity;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.TextView;
 
 import nz.ac.aucklanduni.eyeatlas.R;
 import nz.ac.aucklanduni.eyeatlas.activities.GalleryFragment;
-import nz.ac.aucklanduni.eyeatlas.activities.IndexFragment;
 
 public class NavigationDrawerListAdapter extends ArrayAdapter {
 
