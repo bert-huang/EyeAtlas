@@ -7,7 +7,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     card_view:cardUseCompatPadding="true"
-    card_view:cardBackgroundColor="@color/colourPrimaryDark"
+    card_view:cardBackgroundColor="@color/colourPrimaryCard"
     card_view:cardCornerRadius="0dp">
 
     <LinearLayout

@@ -42,7 +42,7 @@ public class GalleryFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
-        View view = inflater.inflate(R.layout.condition_fragment, container, false);
+        View view = inflater.inflate(R.layout.gallery_fragment, container, false);
         grid = (GridView) view.findViewById(R.id.grid);
         progress = (LinearLayout) view.findViewById(R.id.progressBarContainer);
         return view;

@@ -2,8 +2,11 @@
 
 <resources>
 
-    <item name="colourPrimary" type="color">#FF222222</item>
-    <item name="colourPrimaryDark" type="color">#FF111111</item>
+    <item name="colourPrimaryBg" type="color">#E3F2FD</item>
+    <item name="colourPrimaryCard" type="color">#F5F5F5</item>
+    <item name="colourPrimary" type="color">#2196F3</item>
+    <item name="colourPrimaryDark" type="color">#1976D2</item>
+    <item name="colourPrimary900Dark" type="color">#01579B</item>
 
     <item name="white" type="color">#FFFFFFFF</item>
     <item name="black" type="color">#FF000000</item>
