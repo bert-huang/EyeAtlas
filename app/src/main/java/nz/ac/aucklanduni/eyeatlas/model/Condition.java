@@ -1,9 +1,10 @@
 package nz.ac.aucklanduni.eyeatlas.model;
 
+import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
-public class Condition {
+public class Condition implements Serializable {
 
     private String title;
     private String description;
