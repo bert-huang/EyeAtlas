@@ -6,10 +6,18 @@ import java.util.Set;
 
 public class Condition implements Serializable {
 
+    private Integer id;
     private String title;
     private String description;
     private Category category;
     private Set<Tag> tags = new HashSet<Tag>();
+
+    public Integer getId() {
+        return id;
+    }
+    public void setId(Integer id) {
+        this.id = id;
+    }
 
     public String getTitle() {
         return title;

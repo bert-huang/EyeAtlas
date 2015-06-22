@@ -18,12 +18,12 @@ import nz.ac.aucklanduni.eyeatlas.model.Properties;
 
 public class S3ImageAdapter {
 
-    public static Bitmap getThumbnail(String name, Properties properties) {
+    public static Bitmap getThumbnail(int id, Properties properties) {
         AmazonS3 s3Client = new AmazonS3Client(properties);
 
         s3Client.setRegion(Region.getRegion(Regions.AP_SOUTHEAST_2));
 
-        GetObjectRequest request = new GetObjectRequest(properties.getBucketName(), name + "/" + name + ".png");
+        GetObjectRequest request = new GetObjectRequest(properties.getBucketName(), id + "/" + id + ".png");
         S3Object object = s3Client.getObject(request);
         S3ObjectInputStream in = object.getObjectContent();
         BufferedInputStream bufferedInputStream = new BufferedInputStream(in);
@@ -31,12 +31,12 @@ public class S3ImageAdapter {
         return bmp;
     }
 
-    public static Bitmap getDetailImage(String name, Properties properties) {
+    public static Bitmap getDetailImage(int id, Properties properties) {
         AmazonS3 s3Client = new AmazonS3Client(properties);
 
         s3Client.setRegion(Region.getRegion(Regions.AP_SOUTHEAST_2));
 
-        GetObjectRequest request = new GetObjectRequest(properties.getBucketName(), name + "/" + name + ".png");
+        GetObjectRequest request = new GetObjectRequest(properties.getBucketName(), id + "/" + id + ".png");
         S3Object object = s3Client.getObject(request);
         S3ObjectInputStream in = object.getObjectContent();
         BufferedInputStream bufferedInputStream = new BufferedInputStream(in);
