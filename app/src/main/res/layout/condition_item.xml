@@ -1,38 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v7.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/card_view"
+    android:layout_gravity="center"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:layout_height="wrap_content"
+    card_view:cardUseCompatPadding="true"
+    card_view:cardBackgroundColor="@color/colourPrimaryCard"
+    card_view:cardCornerRadius="0dp">
 
-    <android.support.v7.widget.CardView
-        xmlns:card_view="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/card_view"
-        android:layout_gravity="center"
-        android:layout_width="match_parent"
-        android:layout_height="200dp"
-        android:layout_margin="15dp"
-        card_view:cardCornerRadius="0dp">
+    <LinearLayout
+        android:id="@+id/progressBarContainer"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:visibility="gone" >
 
-        <LinearLayout
-            android:id="@+id/progressBarContainer"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:gravity="center"
-            android:orientation="vertical"
-            android:visibility="gone" >
+        <ProgressBar
+            android:id="@+id/progressBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" >
+        </ProgressBar>
+    </LinearLayout>
 
-            <ProgressBar
-                android:id="@+id/progressBar"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" >
-            </ProgressBar>
-        </LinearLayout>
+    <!--<LinearLayout-->
+        <!--android:id="@+id/cardContentContainer"-->
+        <!--android:layout_width="fill_parent"-->
+        <!--android:layout_height="fill_parent"-->
+        <!--android:gravity="center"-->
+        <!--android:orientation="vertical">-->
 
         <ImageView
             android:scaleType="fitXY"
             android:layout_width="match_parent"
-            android:layout_height="fill_parent"
+            android:layout_height="180dp"
             android:id="@+id/cardImage"
             />
 
@@ -40,9 +43,16 @@
             android:id="@+id/cardText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:layout_gravity="bottom"
             android:textColor="@color/white"
-            android:textSize="32dp"
+            android:fontFamily="sans-serif-light"
+            android:background="@color/transblack"
+            android:textSize="15sp"
+            android:padding="5dp"
+            android:singleLine="true"
             android:gravity="center"/>
-    </android.support.v7.widget.CardView>
-</LinearLayout>
+
+    <!--</LinearLayout>-->
+
+</android.support.v7.widget.CardView>
