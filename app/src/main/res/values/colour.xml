@@ -11,7 +11,7 @@
     <item name="white" type="color">#FFFFFFFF</item>
     <item name="black" type="color">#FF000000</item>
     <item name="transblack" type="color">#BB000000</item>
-    <item name="lightgrey" type="color">#F5F5F5</item>
+    <item name="lightgrey" type="color">#BDBDBD</item>
     <item name="darkgrey" type="color">#424242</item>
 
     <item name="pink500" type="color">#E91E63</item>
