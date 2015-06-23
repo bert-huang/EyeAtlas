@@ -30,6 +30,7 @@ import nz.ac.aucklanduni.eyeatlas.R;
 import nz.ac.aucklanduni.eyeatlas.adapter.ConditionAdapter;
 import nz.ac.aucklanduni.eyeatlas.model.Condition;
 import nz.ac.aucklanduni.eyeatlas.model.Properties;
+import nz.ac.aucklanduni.eyeatlas.util.AsyncTaskHandler;
 
 public class GalleryFragment extends Fragment {
 
@@ -38,6 +39,8 @@ public class GalleryFragment extends Fragment {
     private List<Condition> list;
     private GridView grid;
     private LinearLayout progress;
+
+    private AsyncTaskHandler asyncTaskHandler;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -53,10 +56,12 @@ public class GalleryFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
 
         list = new ArrayList<>();
+        asyncTaskHandler = new AsyncTaskHandler();
 
         ConditionLoader task = new ConditionLoader();
         String url = Properties.getInstance(this.getActivity()).getHerokuUrl() + "rest/condition/all/";
         Log.w("XEYE", url);
+        asyncTaskHandler.add(task);
         task.execute(url);
 
         grid.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -69,6 +74,12 @@ public class GalleryFragment extends Fragment {
             }
         });
 
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        asyncTaskHandler.purgeAll();
     }
 
     private class ConditionLoader extends AsyncTask<String, Void, List<Condition>> {
@@ -114,7 +125,7 @@ public class GalleryFragment extends Fragment {
             }
 
             GalleryFragment.this.list = list;
-            adapter = new ConditionAdapter(getActivity(), GalleryFragment.this.getId(), GalleryFragment.this.list);
+            adapter = new ConditionAdapter(getActivity(), getId(), GalleryFragment.this.list);
             GalleryFragment.this.grid.setAdapter(adapter);
 
             // Place a tiny delay for the view to be inflated (0.5 second)
