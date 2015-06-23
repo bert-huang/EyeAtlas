@@ -7,6 +7,11 @@
     <string name="closeDrawer">CloseDrawer</string>
     <string name="gallery">Gallery</string>
     <string name="index">Index</string>
+    <string name="description">Description</string>
+    <string name="tags">Tags</string>
+    <string name="category">Category</string>
+    <string name="id">ID</string>
+
 
     <string-array name="nav_drawer_list">
         <item>@string/gallery</item>

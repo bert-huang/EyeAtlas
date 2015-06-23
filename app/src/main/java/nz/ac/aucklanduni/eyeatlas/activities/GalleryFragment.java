@@ -2,7 +2,6 @@ package nz.ac.aucklanduni.eyeatlas.activities;
 
 import android.app.AlertDialog;
 import android.app.Fragment;
-import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
@@ -68,9 +67,11 @@ public class GalleryFragment extends Fragment {
 
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent i = new Intent(GalleryFragment.this.getActivity(), DetailedActivity.class);
-                i.putExtra("CONDITION", adapter.getItem(position));
-                startActivity(i);
+                DetailedFragment detailedFragment = new DetailedFragment();
+                Bundle bundle = new Bundle();
+                bundle.putSerializable(DetailedFragment.BUNDLE_KEY, adapter.getItem(position));
+                detailedFragment.setArguments(bundle);
+                GalleryFragment.this.getFragmentManager().beginTransaction().replace(R.id.fragment_container, detailedFragment).addToBackStack(null).commit();
             }
         });
 
