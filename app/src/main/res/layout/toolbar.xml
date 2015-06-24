@@ -7,4 +7,5 @@
     android:elevation="4dp"
     android:paddingTop="@dimen/toolbar_top_padding"
     >
+
 </android.support.v7.widget.Toolbar>
