@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v7.widget.SearchView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +14,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import nz.ac.aucklanduni.eyeatlas.R;
+import nz.ac.aucklanduni.eyeatlas.model.BundleKey;
 import nz.ac.aucklanduni.eyeatlas.model.Condition;
 import nz.ac.aucklanduni.eyeatlas.model.Properties;
 import nz.ac.aucklanduni.eyeatlas.model.Tag;
@@ -20,13 +22,12 @@ import nz.ac.aucklanduni.eyeatlas.util.S3ImageAdapter;
 
 public class DetailedFragment extends Fragment {
     private LinearLayout progress;
-    public static String BUNDLE_KEY = "CONDITION";
     private Condition condition;
 
     @Override
     public void setArguments(Bundle bundle) {
-        if (bundle != null && bundle.containsKey(BUNDLE_KEY)) {
-            this.condition = (Condition) bundle.getSerializable(BUNDLE_KEY);
+        if (bundle != null && bundle.containsKey(BundleKey.CONDITION_KEY)) {
+            this.condition = (Condition) bundle.getSerializable(BundleKey.CONDITION_KEY);
         }
     }
 
@@ -49,7 +50,7 @@ public class DetailedFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(DetailedFragment.this.getActivity(), ImageViewerActivity.class);
-                i.putExtra(BUNDLE_KEY, condition);
+                i.putExtra(BundleKey.CONDITION_KEY, condition);
                 startActivity(i);
             }
         });

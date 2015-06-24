@@ -31,6 +31,7 @@ import java.util.List;
 import nz.ac.aucklanduni.eyeatlas.R;
 import nz.ac.aucklanduni.eyeatlas.adapter.CategoryAdapter;
 import nz.ac.aucklanduni.eyeatlas.adapter.ConditionAdapter;
+import nz.ac.aucklanduni.eyeatlas.model.BundleKey;
 import nz.ac.aucklanduni.eyeatlas.model.Category;
 import nz.ac.aucklanduni.eyeatlas.model.Condition;
 import nz.ac.aucklanduni.eyeatlas.model.Properties;
@@ -39,7 +40,6 @@ import nz.ac.aucklanduni.eyeatlas.util.AsyncTaskHandler;
 public class IndexFragment extends Fragment {
     private CategoryAdapter adapter;
     private List<Category> list;
-    public final static String CATEGORY_KEY = "Category";
     private LinearLayout progress;
     private ListView listView;
 
@@ -47,8 +47,8 @@ public class IndexFragment extends Fragment {
 
     @Override
     public void setArguments(Bundle bundle) {
-        if (bundle != null && bundle.containsKey(CATEGORY_KEY)) {
-            this.list = (List<Category>) bundle.getSerializable(CATEGORY_KEY);
+        if (bundle != null && bundle.containsKey(BundleKey.CATEGORY_KEY)) {
+            this.list = (List<Category>) bundle.getSerializable(BundleKey.CATEGORY_KEY);
         }
     }
 
@@ -82,8 +82,9 @@ public class IndexFragment extends Fragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        asyncTaskHandler.purgeAll();
-
+        if (asyncTaskHandler != null) {
+            asyncTaskHandler.purgeAll();
+        }
     }
 
     class CategoryLoader extends AsyncTask<String, Void, List<Category>> {
@@ -144,22 +145,20 @@ public class IndexFragment extends Fragment {
 
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-            Log.w("XEYE", "clicked position " + position);
             List<Category> children = list.get(position).getChildren();
 
             if (children.isEmpty()) {
-                Log.w("XEYE", "children is empty");
                 GalleryFragment galleryFragment = new GalleryFragment();
                 Bundle bundle = new Bundle();
-                bundle.putSerializable(CATEGORY_KEY, list.get(position));
+                bundle.putSerializable(BundleKey.CATEGORY_KEY, list.get(position));
                 galleryFragment.setArguments(bundle);
-                IndexFragment.this.getFragmentManager().beginTransaction().replace(R.id.fragment_container, galleryFragment, "").addToBackStack(null).commit();
+                IndexFragment.this.getFragmentManager().beginTransaction().replace(R.id.fragment_container, galleryFragment).addToBackStack(null).commit();
                 return;
             }
 
             IndexFragment indexFragment = new IndexFragment();
             Bundle bundle = new Bundle();
-            bundle.putSerializable(CATEGORY_KEY, (java.io.Serializable) children);
+            bundle.putSerializable(BundleKey.CATEGORY_KEY, (java.io.Serializable) children);
             indexFragment.setArguments(bundle);
             IndexFragment.this.getFragmentManager().beginTransaction().replace(R.id.fragment_container, indexFragment, "").addToBackStack(null).commit();
         }

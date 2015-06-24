@@ -20,6 +20,7 @@ import java.util.List;
 import nz.ac.aucklanduni.eyeatlas.R;
 import nz.ac.aucklanduni.eyeatlas.activities.GalleryFragment;
 import nz.ac.aucklanduni.eyeatlas.activities.IndexFragment;
+import nz.ac.aucklanduni.eyeatlas.model.BundleKey;
 import nz.ac.aucklanduni.eyeatlas.model.Category;
 import nz.ac.aucklanduni.eyeatlas.model.Condition;
 
@@ -103,7 +104,7 @@ public class CategoryAdapter extends ArrayAdapter<Category> {
             if (children.isEmpty()) {
                 GalleryFragment galleryFragment = new GalleryFragment();
                 Bundle bundle = new Bundle();
-                bundle.putSerializable(IndexFragment.CATEGORY_KEY, CategoryAdapter.this.getItem(position));
+                bundle.putSerializable(BundleKey.CATEGORY_KEY, CategoryAdapter.this.getItem(position));
                 galleryFragment.setArguments(bundle);
                 CategoryAdapter.this.activity.getFragmentManager().beginTransaction().replace(R.id.fragment_container, galleryFragment).addToBackStack(null).commit();
                 return;
@@ -111,7 +112,7 @@ public class CategoryAdapter extends ArrayAdapter<Category> {
 
             IndexFragment indexFragment = new IndexFragment();
             Bundle bundle = new Bundle();
-            bundle.putSerializable(IndexFragment.CATEGORY_KEY, (java.io.Serializable) children);
+            bundle.putSerializable(BundleKey.CATEGORY_KEY, (java.io.Serializable) children);
             indexFragment.setArguments(bundle);
             CategoryAdapter.this.activity.getFragmentManager().beginTransaction().replace(R.id.fragment_container, indexFragment).addToBackStack(null).commit();
         }

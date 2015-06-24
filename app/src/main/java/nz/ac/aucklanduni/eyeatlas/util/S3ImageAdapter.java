@@ -23,7 +23,7 @@ public class S3ImageAdapter {
 
         s3Client.setRegion(Region.getRegion(Regions.AP_SOUTHEAST_2));
 
-        GetObjectRequest request = new GetObjectRequest(properties.getBucketName(), id + "/" + id + ".png");
+        GetObjectRequest request = new GetObjectRequest(properties.getBucketName(), id + "/thumbnail/thumbnail.jpg");
         S3Object object = s3Client.getObject(request);
         S3ObjectInputStream in = object.getObjectContent();
         BufferedInputStream bufferedInputStream = new BufferedInputStream(in);
@@ -36,7 +36,7 @@ public class S3ImageAdapter {
 
         s3Client.setRegion(Region.getRegion(Regions.AP_SOUTHEAST_2));
 
-        GetObjectRequest request = new GetObjectRequest(properties.getBucketName(), id + "/" + id + ".png");
+        GetObjectRequest request = new GetObjectRequest(properties.getBucketName(), id + "/preview/preview.jpg");
         S3Object object = s3Client.getObject(request);
         S3ObjectInputStream in = object.getObjectContent();
         BufferedInputStream bufferedInputStream = new BufferedInputStream(in);

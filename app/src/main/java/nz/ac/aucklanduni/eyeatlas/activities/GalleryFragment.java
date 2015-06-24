@@ -5,6 +5,7 @@ import android.app.Fragment;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.v7.widget.SearchView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,6 +13,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.type.JavaType;
@@ -27,6 +29,8 @@ import java.util.List;
 
 import nz.ac.aucklanduni.eyeatlas.R;
 import nz.ac.aucklanduni.eyeatlas.adapter.ConditionAdapter;
+import nz.ac.aucklanduni.eyeatlas.model.BundleKey;
+import nz.ac.aucklanduni.eyeatlas.model.Category;
 import nz.ac.aucklanduni.eyeatlas.model.Condition;
 import nz.ac.aucklanduni.eyeatlas.model.Properties;
 import nz.ac.aucklanduni.eyeatlas.util.AsyncTaskHandler;
@@ -40,6 +44,21 @@ public class GalleryFragment extends Fragment {
     private LinearLayout progress;
 
     private AsyncTaskHandler asyncTaskHandler;
+    private String url;
+    private String term;
+
+    @Override
+    public void setArguments(Bundle bundle) {
+        if (bundle != null) {
+            if (bundle.containsKey(BundleKey.CATEGORY_KEY)) {
+                Category category = (Category) bundle.getSerializable(BundleKey.CATEGORY_KEY);
+                url = Properties.getInstance(this.getActivity()).getHerokuUrl() + "rest/condition/category/" + category.getId().replaceAll(" ", "%20");
+            } else if (bundle.containsKey(BundleKey.SEARCH_KEY)) {
+                term = (String) bundle.getSerializable(BundleKey.SEARCH_KEY);
+                url = Properties.getInstance(this.getActivity()).getHerokuUrl() + "/rest/condition/search/" + term.replaceAll(" ", "%20");
+            }
+        }
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -51,15 +70,34 @@ public class GalleryFragment extends Fragment {
     }
 
     @Override
+    public void onSaveInstanceState(final Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putSerializable(BundleKey.SEARCH_KEY, term);
+    }
+
+    @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+
+        SearchView searchView = ((MainActivity) this.getActivity()).getSearchView();
+        if (searchView != null) {
+            if (term != null) {
+                searchView.setQuery(term, false);
+            } else {
+                searchView.setQuery("", false);
+            }
+            searchView.clearFocus();
+        }
 
         list = new ArrayList<>();
         asyncTaskHandler = new AsyncTaskHandler();
 
         ConditionLoader task = new ConditionLoader();
-        String url = Properties.getInstance(this.getActivity()).getHerokuUrl() + "rest/condition/all/";
-        Log.w("XEYE", url);
+
+        if (url == null) {
+            url = Properties.getInstance(this.getActivity()).getHerokuUrl() + "rest/condition/all/";
+        }
+
         asyncTaskHandler.add(task);
         task.execute(url);
 
@@ -69,7 +107,7 @@ public class GalleryFragment extends Fragment {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 DetailedFragment detailedFragment = new DetailedFragment();
                 Bundle bundle = new Bundle();
-                bundle.putSerializable(DetailedFragment.BUNDLE_KEY, adapter.getItem(position));
+                bundle.putSerializable(BundleKey.CONDITION_KEY, adapter.getItem(position));
                 detailedFragment.setArguments(bundle);
                 GalleryFragment.this.getFragmentManager().beginTransaction().replace(R.id.fragment_container, detailedFragment).addToBackStack(null).commit();
             }
@@ -80,7 +118,9 @@ public class GalleryFragment extends Fragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        asyncTaskHandler.purgeAll();
+        if (asyncTaskHandler != null) {
+            asyncTaskHandler.purgeAll();
+        }
     }
 
     private class ConditionLoader extends AsyncTask<String, Void, List<Condition>> {
@@ -137,9 +177,6 @@ public class GalleryFragment extends Fragment {
                     progress.setVisibility(View.GONE);
                 }
             }, 500);
-
-
-
         }
     }
 
