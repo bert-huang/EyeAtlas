@@ -1,5 +1,6 @@
 <ScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:fab="http://schemas.android.com/apk/res-auto"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content">
 
@@ -35,103 +36,132 @@
                 android:layout_height="250dp"
                 android:elevation="4dp"/>
 
-
-
         </RelativeLayout>
 
-        <TextView
-            android:id="@+id/detail_title"
+        <View
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="30dp"
-            android:layout_marginBottom="20dp"
-            android:textSize="24sp"
-            android:fontFamily="sans-serf-thin"
-            android:textColor="@color/darkgrey"
-            android:gravity="center"/>
+            android:layout_height="1px"
+            android:background="@color/grey_500">
+        </View>
 
-        <TextView
-            android:id="@+id/detail_description_header"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="16sp"
-            android:textColor="@color/lightgrey"
-            android:text="@string/description"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp"
-            android:paddingBottom="10dp"/>
+        <com.melnykov.fab.FloatingActionButton
 
-        <TextView
-            android:id="@+id/detail_description"
-            android:layout_width="match_parent"
+            android:id="@+id/fab"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="16sp"
-            android:textColor="@color/darkgrey"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp"
-            android:paddingBottom="20dp"/>
+            android:layout_gravity="bottom|right"
+            android:layout_marginTop="-32dp"
+            android:layout_marginRight="32dp"
+            android:layout_marginLeft="32dp"
+            android:src="@drawable/ic_expand"
+            fab:fab_colorNormal="@color/colourPrimary"
+            fab:fab_colorPressed="@color/colourPrimaryDark" />
 
-        <TextView
-            android:id="@+id/detail_category_header"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="16sp"
-            android:textColor="@color/lightgrey"
-            android:text="@string/category"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp"
-            android:paddingBottom="10dp"/>
+            android:orientation="vertical"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp">
 
-        <TextView
-            android:id="@+id/detail_category"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="16sp"
-            android:textColor="@color/darkgrey"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp"
-            android:paddingBottom="20dp"/>
+            <TextView
+                android:id="@+id/detail_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="20dp"
+                android:textSize="24sp"
+                android:fontFamily="sans-serf-thin"
+                android:textColor="@color/textDark"
+                android:gravity="center"/>
 
-        <TextView
-            android:id="@+id/detail_tag_header"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="16sp"
-            android:textColor="@color/lightgrey"
-            android:text="@string/tags"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp"
-            android:paddingBottom="10dp"/>
+            <TextView
+                android:id="@+id/detail_description_header"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="16sp"
+                android:textColor="@color/textDim"
+                android:text="@string/description"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:paddingBottom="10dp"/>
 
-        <TextView
-            android:id="@+id/detail_tag"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="16sp"
-            android:textColor="@color/darkgrey"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp"
-            android:paddingBottom="20dp"/>
+            <TextView
+                android:id="@+id/detail_description"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="16sp"
+                android:textColor="@color/textDark"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:paddingBottom="20dp"/>
 
-        <TextView
-            android:id="@+id/detail_id_header"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="16sp"
-            android:textColor="@color/lightgrey"
-            android:text="@string/id"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp"
-            android:paddingBottom="10dp"/>
+            <TextView
+                android:id="@+id/detail_category_header"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="16sp"
+                android:textColor="@color/textDim"
+                android:text="@string/category"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:paddingBottom="10dp"/>
 
-        <TextView
-            android:id="@+id/detail_id"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="16sp"
-            android:textColor="@color/darkgrey"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp"
-            android:paddingBottom="20dp"/>
+            <TextView
+                android:id="@+id/detail_category"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="16sp"
+                android:textColor="@color/textDark"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:paddingBottom="20dp"/>
+
+            <TextView
+                android:id="@+id/detail_tag_header"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="16sp"
+                android:textColor="@color/textDim"
+                android:text="@string/tags"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:paddingBottom="10dp"/>
+
+            <TextView
+                android:id="@+id/detail_tag"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="16sp"
+                android:textColor="@color/textDark"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:paddingBottom="20dp"/>
+
+            <TextView
+                android:id="@+id/detail_id_header"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="16sp"
+                android:textColor="@color/textDim"
+                android:text="@string/id"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:paddingBottom="10dp"/>
+
+            <TextView
+                android:id="@+id/detail_id"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="16sp"
+                android:textColor="@color/textDark"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:paddingBottom="20dp"/>
+
+        </LinearLayout>
+
+
+
     </LinearLayout>
 </ScrollView>

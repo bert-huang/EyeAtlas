@@ -1,9 +1,11 @@
 package nz.ac.aucklanduni.eyeatlas.activities;
 
+import android.app.AlertDialog;
 import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -14,6 +16,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import com.melnykov.fab.FloatingActionButton;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -28,6 +32,7 @@ import nz.ac.aucklanduni.eyeatlas.util.S3ImageAdapter;
 public class DetailedFragment extends Fragment {
     private LinearLayout progress;
     private Condition condition;
+    private FloatingActionButton fab;
 
     @Override
     public void setArguments(Bundle bundle) {
@@ -41,6 +46,7 @@ public class DetailedFragment extends Fragment {
         super.onCreateView(inflater, container, savedInstanceState);
         View view = inflater.inflate(R.layout.detail_fragment, container, false);
         progress = (LinearLayout) view.findViewById(R.id.progressBarContainer);
+        fab = (FloatingActionButton) view.findViewById(R.id.fab);
 
         final ImageView imageView = (ImageView) view.findViewById(R.id.detail_image);
         TextView title = (TextView) view.findViewById(R.id.detail_title);
@@ -49,14 +55,13 @@ public class DetailedFragment extends Fragment {
         TextView tag = (TextView) view.findViewById(R.id.detail_tag);
         TextView id = (TextView) view.findViewById(R.id.detail_id);
 
-        initialiseContent(condition ,imageView, title, description, category, tag, id);
+        initialiseContent(condition, imageView, title, description, category, tag, id);
 
-        imageView.setOnClickListener(new View.OnClickListener() {
+        fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(DetailedFragment.this.getActivity(), ImageViewerActivity.class);
                 i.putExtra(BundleKey.CONDITION_KEY, condition);
-                writePreviewToFile(condition.getId() + ".jpg", ((BitmapDrawable)imageView.getDrawable()).getBitmap());
                 startActivity(i);
             }
         });
@@ -64,7 +69,8 @@ public class DetailedFragment extends Fragment {
         return view;
     }
 
-    private void initialiseContent(Condition condition, ImageView imageView, TextView title, TextView description, TextView category, TextView tag, TextView id) {
+    private void initialiseContent(Condition condition, ImageView imageView, TextView title,
+                                   TextView description, TextView category, TextView tag, TextView id) {
 
         this.setImage(condition.getId(), imageView);
 
@@ -88,13 +94,11 @@ public class DetailedFragment extends Fragment {
         new AsyncTask<Object, Object, Bitmap>() {
             @Override
             protected Bitmap doInBackground(Object... params) {
-                Bitmap bmp;
+                Bitmap bmp = null;
                 try {
                     bmp = S3ImageAdapter.getDetailImage(id, Properties.getInstance(DetailedFragment.this.getActivity()));
                 } catch (Exception e) {
                     e.printStackTrace();
-                    //Display popup and shut down the app
-                    throw new RuntimeException("Image could not be obtained");
                 }
                 return bmp;
             }
@@ -106,27 +110,26 @@ public class DetailedFragment extends Fragment {
 
             @Override
             protected void onPostExecute(Bitmap result) {
-                imageView.setImageBitmap(result);
+
+                if (result == null) {
+                    AlertDialog.Builder alert = new AlertDialog.Builder(DetailedFragment.this.getActivity());
+                    alert.setTitle("Error");
+                    alert.setMessage("Cannot fetch image from server. Please check your " +
+                            "internet connection or contact administrator for support.");
+                    alert.setPositiveButton("OK", null);
+                    alert.show();
+                    fab.setEnabled(false);
+
+                    result = BitmapFactory.decodeResource(
+                            DetailedFragment.this.getActivity().getResources(), R.drawable.ic_404);
+                    imageView.setImageBitmap(result);
+                } else {
+                    imageView.setImageBitmap(result);
+                }
+
+
                 progress.setVisibility(View.GONE);
             }
         }.execute();
-    }
-
-    private void writePreviewToFile(String fileName, Bitmap bmp) {
-        FileOutputStream out = null;
-        try {
-            out = this.getActivity().openFileOutput(fileName, Context.MODE_PRIVATE);
-            bmp.compress(Bitmap.CompressFormat.JPEG, 100, out);
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                if (out != null) {
-                    out.close();
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
     }
 }

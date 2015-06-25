@@ -10,7 +10,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import nz.ac.aucklanduni.eyeatlas.R;
-import nz.ac.aucklanduni.eyeatlas.activities.GalleryFragment;
 
 public class NavigationDrawerListAdapter extends ArrayAdapter {
 
@@ -26,7 +25,7 @@ public class NavigationDrawerListAdapter extends ArrayAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         LayoutInflater inflator = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View rowView = inflator.inflate(R.layout.item_row, parent, false);
+        View rowView = inflator.inflate(R.layout.navigation_drawer_item, parent, false);
 
         ImageView imgView = (ImageView) rowView.findViewById(R.id.rowIcon);
         TextView txtView = (TextView) rowView.findViewById(R.id.rowText);

@@ -7,7 +7,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     card_view:cardUseCompatPadding="true"
-    card_view:cardBackgroundColor="@color/colourPrimaryCard"
+    card_view:cardBackgroundColor="@color/cardBg"
     card_view:cardCornerRadius="0dp">
 
     <LinearLayout
@@ -45,9 +45,9 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:layout_gravity="bottom"
-            android:textColor="@color/white"
+            android:textColor="@color/textLight"
             android:fontFamily="sans-serif-light"
-            android:background="@color/transblack"
+            android:background="@color/cardLabel"
             android:textSize="15sp"
             android:padding="5dp"
             android:singleLine="true"

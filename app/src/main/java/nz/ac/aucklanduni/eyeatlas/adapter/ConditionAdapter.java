@@ -14,6 +14,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import java.io.Serializable;
 import java.util.List;
 
 import nz.ac.aucklanduni.eyeatlas.R;
@@ -21,7 +22,7 @@ import nz.ac.aucklanduni.eyeatlas.model.Condition;
 import nz.ac.aucklanduni.eyeatlas.model.Properties;
 import nz.ac.aucklanduni.eyeatlas.util.S3ImageAdapter;
 
-public class ConditionAdapter extends ArrayAdapter<Condition>  {
+public class ConditionAdapter extends ArrayAdapter<Condition> implements Serializable {
 
     private LruCache<String, Bitmap> mMemoryCache;
 

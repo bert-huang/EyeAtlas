@@ -1,5 +1,6 @@
 package nz.ac.aucklanduni.eyeatlas.activities;
 
+import android.graphics.Bitmap;
 import android.net.http.HttpResponseCache;
 import android.support.v4.widget.DrawerLayout;
 import android.os.Bundle;
@@ -8,6 +9,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.util.LruCache;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -31,22 +33,14 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-
-        try {
-            File httpCacheDir = new File(this.getCacheDir(), "http");
-            long httpCacheSize = 10 * 1024 * 1024; // 10 MiB
-            HttpResponseCache.install(httpCacheDir, httpCacheSize);
-        }catch (IOException e) {
-            Log.i("XEYE", "HTTP response cache installation failed:" + e);
-        }
+        setContentView(R.layout.main_activity);
 
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         initialiseDrawer();
 
-        GalleryFragment galleryFragment = new GalleryFragment();
-        this.getFragmentManager().beginTransaction().replace(R.id.fragment_container, galleryFragment).addToBackStack(null).commit();
+        ConditionFragment conditionFragment = new ConditionFragment();
+        this.getFragmentManager().beginTransaction().replace(R.id.fragment_container, conditionFragment).addToBackStack(null).commit();
     }
 
     public SearchView getSearchView() {
@@ -61,11 +55,11 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public boolean onQueryTextSubmit(String s) {
                 if (s != null && !s.equals("")) {
-                    GalleryFragment galleryFragment = new GalleryFragment();
+                    ConditionFragment conditionFragment = new ConditionFragment();
                     Bundle bundle = new Bundle();
                     bundle.putSerializable(BundleKey.SEARCH_KEY, s);
-                    galleryFragment.setArguments(bundle);
-                    MainActivity.this.getFragmentManager().beginTransaction().replace(R.id.fragment_container, galleryFragment).addToBackStack(null).commit();
+                    conditionFragment.setArguments(bundle);
+                    MainActivity.this.getFragmentManager().beginTransaction().replace(R.id.fragment_container, conditionFragment).addToBackStack(null).commit();
                     return true;
                 } else {
                     return false;
@@ -126,7 +120,10 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        if (getFragmentManager().getBackStackEntryCount() > 1 ){
+        if(!searchView.isIconified()) {
+            searchView.setQuery("", false);
+            searchView.setIconified(true);
+        } else if (getFragmentManager().getBackStackEntryCount() > 1 ){
             getFragmentManager().popBackStack();
         } else {
             super.onBackPressed();
