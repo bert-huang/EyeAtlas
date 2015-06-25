@@ -2,14 +2,11 @@ package nz.ac.aucklanduni.eyeatlas.activities;
 
 import android.app.AlertDialog;
 import android.app.Fragment;
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.drawable.BitmapDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v7.widget.SearchView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,14 +16,12 @@ import android.widget.TextView;
 
 import com.melnykov.fab.FloatingActionButton;
 
-import java.io.FileOutputStream;
-import java.io.IOException;
-
 import nz.ac.aucklanduni.eyeatlas.R;
 import nz.ac.aucklanduni.eyeatlas.model.BundleKey;
 import nz.ac.aucklanduni.eyeatlas.model.Condition;
 import nz.ac.aucklanduni.eyeatlas.model.Properties;
 import nz.ac.aucklanduni.eyeatlas.model.Tag;
+import nz.ac.aucklanduni.eyeatlas.util.ImageLruCache;
 import nz.ac.aucklanduni.eyeatlas.util.S3ImageAdapter;
 
 public class DetailedFragment extends Fragment {
@@ -72,7 +67,13 @@ public class DetailedFragment extends Fragment {
     private void initialiseContent(Condition condition, ImageView imageView, TextView title,
                                    TextView description, TextView category, TextView tag, TextView id) {
 
-        this.setImage(condition.getId(), imageView);
+        final String imageKey = S3ImageAdapter.getThumbnailUrl(condition.getId());
+        final Bitmap bitmap = ImageLruCache.getInstance().getBitmapFromMemCache(imageKey);
+        if (bitmap != null) {
+            imageView.setImageBitmap(bitmap);
+        } else {
+            this.setImage(condition.getId(), imageView);
+        }
 
         title.setText(condition.getTitle());
         description.setText(condition.getDescription());
@@ -96,7 +97,8 @@ public class DetailedFragment extends Fragment {
             protected Bitmap doInBackground(Object... params) {
                 Bitmap bmp = null;
                 try {
-                    bmp = S3ImageAdapter.getDetailImage(id, Properties.getInstance(DetailedFragment.this.getActivity()));
+                    bmp = S3ImageAdapter.getPreviewImage(id, Properties.getInstance(DetailedFragment.this.getActivity()));
+                    ImageLruCache.getInstance().addBitmapToMemoryCache(S3ImageAdapter.getPreviewImageUrl(id), bmp);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }

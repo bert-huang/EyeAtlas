@@ -18,6 +18,14 @@ import nz.ac.aucklanduni.eyeatlas.model.Properties;
 
 public class S3ImageAdapter {
 
+    public static String getThumbnailUrl(int id) {
+        return id + "/thumbnail/thumbnail.jpg";
+    }
+
+    public static String getPreviewImageUrl(int id) {
+        return id + "/preview/preview.jpg";
+    }
+
     public static Bitmap getThumbnail(int id, Properties properties) {
         AmazonS3 s3Client = new AmazonS3Client(properties);
 
@@ -31,7 +39,7 @@ public class S3ImageAdapter {
         return bmp;
     }
 
-    public static Bitmap getDetailImage(int id, Properties properties) {
+    public static Bitmap getPreviewImage(int id, Properties properties) {
         AmazonS3 s3Client = new AmazonS3Client(properties);
 
         s3Client.setRegion(Region.getRegion(Regions.AP_SOUTHEAST_2));
