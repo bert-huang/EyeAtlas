@@ -1,56 +1,73 @@
 package nz.ac.aucklanduni.eyeatlas.activities;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.res.AssetManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
 import com.qozix.tileview.TileView;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.Serializable;
+
+import nz.ac.aucklanduni.eyeatlas.graphics.EyeAtlasDecoder;
+import nz.ac.aucklanduni.eyeatlas.model.BundleKey;
+import nz.ac.aucklanduni.eyeatlas.model.Condition;
 
 
 public class ImageViewerActivity extends Activity {
 
     private TileView tileView;
-    private static final int IMAGE_SCALE = 0;
+    private static final float IMAGE_SCALE = 0;
 
-    //bundle variables passed to activity
-    private int imageId;
-    private String imageName;
     private int imageSizeX;
     private int imageSizeY;
-    private float[] detailLevels;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        this.unpackBundle(savedInstanceState);
+        Bundle bundle = this.getIntent().getExtras();
+        Condition condition = (Condition) bundle.getSerializable(BundleKey.CONDITION_KEY);
+
+        imageSizeY = condition.getImageHeight();
+        imageSizeX = condition.getImageWidth();
 
         tileView = new TileView( this );
         tileView.setCacheEnabled( true );
         setContentView( tileView );
         tileView.setBackgroundColor(Color.BLACK);
-        tileView.disableSuppress();
+        //tileView.disableSuppress();
+        tileView.setDecoder(new EyeAtlasDecoder());
 
         // size of original image at 100% scale
         tileView.setSize(imageSizeX, imageSizeY );
 
+        String previewFile = condition.getId().toString() + "/preview/preview.jpg";
+
+
         // detail levels
-        tileView.addDetailLevel( 0.500f, "tiles/fantasy/500/%col%_%row%.jpg", "samples/middle-earth.jpg");
-        tileView.addDetailLevel( 0.250f, "tiles/fantasy/250/%col%_%row%.jpg", "samples/middle-earth.jpg");
-        tileView.addDetailLevel( 0.125f, "tiles/fantasy/125/%col%_%row%.jpg", "samples/middle-earth.jpg");
+        tileView.addDetailLevel( 1.000f, condition.getId().toString() + "/1000/img_%col%_%row%.jpg", previewFile, 2000, 2000);
+        tileView.addDetailLevel( 0.750f, condition.getId().toString() + "/500/img_%col%_%row%.jpg", previewFile, 2000, 2000);
+        tileView.addDetailLevel( 0.500f, condition.getId().toString() + "/250/img_%col%_%row%.jpg", previewFile, 2000, 2000);
+        tileView.addDetailLevel( 0.250f, condition.getId().toString() + "/125/img_%col%_%row%.jpg", previewFile, 2000, 2000);
 
         // allow scaling past original size
         tileView.setScaleLimits( 0, 2 );
 
-        // frame the troll
-        frameTo( imageSizeX / 2, imageSizeY / 2 );
+        frameTo(imageSizeX / 2, imageSizeY / 2);
 
         // scale down a little
         tileView.setScale( IMAGE_SCALE );
@@ -78,11 +95,6 @@ public class ImageViewerActivity extends Activity {
 
     public TileView getTileView(){
         return tileView;
-    }
-
-    private void unpackBundle(Bundle bundle) {
-        imageSizeY = 4057;
-        imageSizeX = 4015;
     }
 
     /**

@@ -7,4 +7,5 @@ public class BundleKey {
     public final static String CATEGORY_KEY = "CATEGORY";
     public static String CONDITION_KEY = "CONDITION";
     public static String SEARCH_KEY = "SEARCH";
+    public static String CONDITION_IMAGE_KEY = "CONDITION_IMAGE";
 }

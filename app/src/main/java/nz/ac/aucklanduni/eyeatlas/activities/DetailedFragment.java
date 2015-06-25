@@ -1,8 +1,10 @@
 package nz.ac.aucklanduni.eyeatlas.activities;
 
 import android.app.Fragment;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.widget.SearchView;
@@ -12,6 +14,9 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import java.io.FileOutputStream;
+import java.io.IOException;
 
 import nz.ac.aucklanduni.eyeatlas.R;
 import nz.ac.aucklanduni.eyeatlas.model.BundleKey;
@@ -32,12 +37,12 @@ public class DetailedFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, final ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
         View view = inflater.inflate(R.layout.detail_fragment, container, false);
         progress = (LinearLayout) view.findViewById(R.id.progressBarContainer);
 
-        ImageView imageView = (ImageView) view.findViewById(R.id.detail_image);
+        final ImageView imageView = (ImageView) view.findViewById(R.id.detail_image);
         TextView title = (TextView) view.findViewById(R.id.detail_title);
         TextView description = (TextView) view.findViewById(R.id.detail_description);
         TextView category = (TextView) view.findViewById(R.id.detail_category);
@@ -51,6 +56,7 @@ public class DetailedFragment extends Fragment {
             public void onClick(View v) {
                 Intent i = new Intent(DetailedFragment.this.getActivity(), ImageViewerActivity.class);
                 i.putExtra(BundleKey.CONDITION_KEY, condition);
+                writePreviewToFile(condition.getId() + ".jpg", ((BitmapDrawable)imageView.getDrawable()).getBitmap());
                 startActivity(i);
             }
         });
@@ -104,5 +110,23 @@ public class DetailedFragment extends Fragment {
                 progress.setVisibility(View.GONE);
             }
         }.execute();
+    }
+
+    private void writePreviewToFile(String fileName, Bitmap bmp) {
+        FileOutputStream out = null;
+        try {
+            out = this.getActivity().openFileOutput(fileName, Context.MODE_PRIVATE);
+            bmp.compress(Bitmap.CompressFormat.JPEG, 100, out);
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (out != null) {
+                    out.close();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
 }
