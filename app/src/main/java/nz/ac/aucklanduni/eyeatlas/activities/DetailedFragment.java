@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
+import android.net.http.HttpResponseCache;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.widget.SearchView;
@@ -14,6 +15,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -65,7 +67,6 @@ public class DetailedFragment extends Fragment {
     }
 
     private void initialiseContent(Condition condition, ImageView imageView, TextView title, TextView description, TextView category, TextView tag, TextView id) {
-
         this.setImage(condition.getId(), imageView);
 
         title.setText(condition.getTitle());
@@ -90,7 +91,7 @@ public class DetailedFragment extends Fragment {
             protected Bitmap doInBackground(Object... params) {
                 Bitmap bmp;
                 try {
-                    bmp = S3ImageAdapter.getDetailImage(id, Properties.getInstance(DetailedFragment.this.getActivity()));
+                    bmp = S3ImageAdapter.getDetailImage(id, Properties.getInstance(DetailedFragment.this.getActivity()), DetailedFragment.this.getActivity());
                 } catch (Exception e) {
                     e.printStackTrace();
                     //Display popup and shut down the app

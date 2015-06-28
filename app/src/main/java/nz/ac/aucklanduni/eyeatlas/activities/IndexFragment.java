@@ -102,6 +102,8 @@ public class IndexFragment extends Fragment {
             try {
                 URL url = new URL(urls[0]);
                 URLConnection conn = url.openConnection();
+                conn.addRequestProperty("Cache-Control", "max-stale=" + 60 * 60);
+                conn.setUseCaches(true);
                 InputStream in = conn.getInputStream();
                 BufferedReader br = new BufferedReader(new InputStreamReader(in));
                 String val = br.readLine();

@@ -12,6 +12,9 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ListView;
+import android.widget.Toast;
+
+import com.example.android.displaybitmaps.ImageCache;
 
 import java.io.File;
 import java.io.IOException;
@@ -22,11 +25,11 @@ import nz.ac.aucklanduni.eyeatlas.listeners.NavigationDrawerListListener;
 import nz.ac.aucklanduni.eyeatlas.model.BundleKey;
 
 public class MainActivity extends AppCompatActivity {
-
     private Toolbar toolbar;
     DrawerLayout drawer;
     ActionBarDrawerToggle mDrawerToggle;
     private SearchView searchView;
+    public static ImageCache imageCache;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,9 +40,16 @@ public class MainActivity extends AppCompatActivity {
             File httpCacheDir = new File(this.getCacheDir(), "http");
             long httpCacheSize = 10 * 1024 * 1024; // 10 MiB
             HttpResponseCache.install(httpCacheDir, httpCacheSize);
-        }catch (IOException e) {
+        } catch (IOException e) {
             Log.i("XEYE", "HTTP response cache installation failed:" + e);
         }
+
+        ImageCache.ImageCacheParams prams = new ImageCache.ImageCacheParams(this, "s3Images");
+        final int maxMemory = (int) (Runtime.getRuntime().maxMemory() / 1024);
+        final int cacheSize = maxMemory / 8;
+        prams.memCacheSize = cacheSize;
+        imageCache = ImageCache.getInstance(this.getFragmentManager(), prams);
+        imageCache.initDiskCache();
 
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);

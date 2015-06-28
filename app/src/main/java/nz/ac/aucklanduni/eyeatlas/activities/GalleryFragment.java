@@ -2,6 +2,7 @@ package nz.ac.aucklanduni.eyeatlas.activities;
 
 import android.app.AlertDialog;
 import android.app.Fragment;
+import android.net.http.HttpResponseCache;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
@@ -138,6 +139,8 @@ public class GalleryFragment extends Fragment {
             try {
                 URL url = new URL(urls[0]);
                 URLConnection conn = url.openConnection();
+                conn.addRequestProperty("Cache-Control", "max-stale=" + 60 * 60);
+                conn.setUseCaches(true);
                 InputStream in = conn.getInputStream();
                 BufferedReader br = new BufferedReader(new InputStreamReader(in));
                 String val = br.readLine();
