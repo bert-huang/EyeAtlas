@@ -67,7 +67,7 @@ public class DetailedFragment extends Fragment {
     private void initialiseContent(Condition condition, ImageView imageView, TextView title,
                                    TextView description, TextView category, TextView tag, TextView id) {
 
-        final String imageKey = S3ImageAdapter.getThumbnailUrl(condition.getId());
+        final String imageKey = S3ImageAdapter.getPreviewImageUrl(condition.getId());
         final Bitmap bitmap = ImageLruCache.getInstance().getBitmapFromMemCache(imageKey);
         if (bitmap != null) {
             imageView.setImageBitmap(bitmap);
