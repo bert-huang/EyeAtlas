@@ -5,7 +5,6 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
-import android.util.LruCache;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,7 +13,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import java.io.Serializable;
 import java.util.List;
 
 import nz.ac.aucklanduni.eyeatlas.R;
@@ -23,7 +21,8 @@ import nz.ac.aucklanduni.eyeatlas.model.Properties;
 import nz.ac.aucklanduni.eyeatlas.util.ImageLruCache;
 import nz.ac.aucklanduni.eyeatlas.util.S3ImageAdapter;
 
-public class ConditionAdapter extends ArrayAdapter<Condition> implements Serializable {
+
+public class ConditionAdapter extends ArrayAdapter<Condition> {
 
     public ConditionAdapter(Activity activity, int viewId, List<Condition> items) {
         super(activity, viewId, items);
@@ -70,13 +69,14 @@ public class ConditionAdapter extends ArrayAdapter<Condition> implements Seriali
 
         final String imageKey = S3ImageAdapter.getThumbnailUrl(id);
 
-        final Bitmap bitmap = ImageLruCache.getInstance().getBitmapFromMemCache(imageKey);
+        final Bitmap bitmap = ImageLruCache.getInstance(getContext()).getBitmapFromCache(imageKey);
         if (bitmap != null) {
             view.imageView.setImageBitmap(bitmap);
         } else {
             FetchImageTask task = new FetchImageTask(id, view);
             task.execute();
         }
+
     }
 
     class FetchImageTask extends AsyncTask<Void, Void, Bitmap> {
@@ -99,7 +99,10 @@ public class ConditionAdapter extends ArrayAdapter<Condition> implements Seriali
             Bitmap bmp;
             try {
                 bmp = S3ImageAdapter.getThumbnail(id, Properties.getInstance(ConditionAdapter.this.getContext()));
-                ImageLruCache.getInstance().addBitmapToMemoryCache(S3ImageAdapter.getThumbnailUrl(id), bmp);
+                if(bmp != null) {
+                    ImageLruCache.getInstance(getContext()).addBitmapToCache(S3ImageAdapter.getThumbnailUrl(id), bmp);
+                }
+
             } catch (Exception e) {
                 e.printStackTrace();
                 return null;

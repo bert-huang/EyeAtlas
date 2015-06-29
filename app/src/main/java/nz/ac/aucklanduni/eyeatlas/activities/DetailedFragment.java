@@ -21,6 +21,7 @@ import nz.ac.aucklanduni.eyeatlas.model.BundleKey;
 import nz.ac.aucklanduni.eyeatlas.model.Condition;
 import nz.ac.aucklanduni.eyeatlas.model.Properties;
 import nz.ac.aucklanduni.eyeatlas.model.Tag;
+import nz.ac.aucklanduni.eyeatlas.util.AsyncTaskHandler;
 import nz.ac.aucklanduni.eyeatlas.util.ImageLruCache;
 import nz.ac.aucklanduni.eyeatlas.util.S3ImageAdapter;
 
@@ -28,6 +29,7 @@ public class DetailedFragment extends Fragment {
     private LinearLayout progress;
     private Condition condition;
     private FloatingActionButton fab;
+    private AsyncTaskHandler asyncTaskHandler;
 
     @Override
     public void setArguments(Bundle bundle) {
@@ -39,6 +41,8 @@ public class DetailedFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, final ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
+        asyncTaskHandler = new AsyncTaskHandler();
+
         View view = inflater.inflate(R.layout.detail_fragment, container, false);
         progress = (LinearLayout) view.findViewById(R.id.progressBarContainer);
         fab = (FloatingActionButton) view.findViewById(R.id.fab);
@@ -68,11 +72,11 @@ public class DetailedFragment extends Fragment {
                                    TextView description, TextView category, TextView tag, TextView id) {
 
         final String imageKey = S3ImageAdapter.getPreviewImageUrl(condition.getId());
-        final Bitmap bitmap = ImageLruCache.getInstance().getBitmapFromMemCache(imageKey);
+        final Bitmap bitmap = ImageLruCache.getInstance(getActivity()).getBitmapFromCache(imageKey);
         if (bitmap != null) {
             imageView.setImageBitmap(bitmap);
         } else {
-            this.setImage(condition.getId(), imageView);
+            this.fetchImage(condition.getId(), imageView);
         }
 
         title.setText(condition.getTitle());
@@ -87,18 +91,20 @@ public class DetailedFragment extends Fragment {
         }
         sb.delete(sb.length()-2, sb.length());
         tag.setText(sb.toString());
-
-
     }
 
-    private void setImage(final int id, final ImageView imageView) {
+    private void fetchImage(final int id, final ImageView imageView) {
         new AsyncTask<Object, Object, Bitmap>() {
             @Override
             protected Bitmap doInBackground(Object... params) {
                 Bitmap bmp = null;
                 try {
                     bmp = S3ImageAdapter.getPreviewImage(id, Properties.getInstance(DetailedFragment.this.getActivity()));
-                    ImageLruCache.getInstance().addBitmapToMemoryCache(S3ImageAdapter.getPreviewImageUrl(id), bmp);
+
+                    if (bmp != null) {
+                        ImageLruCache.getInstance(DetailedFragment.this.getActivity()).addBitmapToCache(S3ImageAdapter.getPreviewImageUrl(id), bmp);
+                    }
+
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -133,5 +139,13 @@ public class DetailedFragment extends Fragment {
                 progress.setVisibility(View.GONE);
             }
         }.execute();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if (asyncTaskHandler != null) {
+            asyncTaskHandler.purgeAll();
+        }
     }
 }

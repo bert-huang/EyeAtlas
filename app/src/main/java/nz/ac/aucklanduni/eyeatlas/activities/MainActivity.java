@@ -14,6 +14,9 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ListView;
+import android.widget.Toast;
+
+import com.example.android.displaybitmaps.ImageCache;
 
 import java.io.File;
 import java.io.IOException;
@@ -24,18 +27,24 @@ import nz.ac.aucklanduni.eyeatlas.listeners.NavigationDrawerListListener;
 import nz.ac.aucklanduni.eyeatlas.model.BundleKey;
 
 public class MainActivity extends AppCompatActivity {
-
     private Toolbar toolbar;
     DrawerLayout drawer;
     ActionBarDrawerToggle mDrawerToggle;
     private SearchView searchView;
 
-    private LruCache<String, Bitmap> mMemoryCache;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.main_activity);
+
+        try {
+            File httpCacheDir = new File(this.getCacheDir(), "http");
+            long httpCacheSize = 10 * 1024 * 1024; // 10 MiB
+            HttpResponseCache.install(httpCacheDir, httpCacheSize);
+        } catch (IOException e) {
+            Log.i("XEYE", "HTTP response cache installation failed:" + e);
+        }
 
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);

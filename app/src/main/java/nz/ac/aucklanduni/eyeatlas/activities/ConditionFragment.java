@@ -2,6 +2,7 @@ package nz.ac.aucklanduni.eyeatlas.activities;
 
 import android.app.AlertDialog;
 import android.app.Fragment;
+import android.net.http.HttpResponseCache;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
@@ -56,8 +57,8 @@ public class ConditionFragment extends Fragment {
                 term = (String) bundle.getSerializable(BundleKey.SEARCH_KEY);
                 list = (List) bundle.getSerializable(BundleKey.CONDITION_LIST_KEY);
                 url = Properties.getInstance(this.getActivity()).getHerokuUrl() + "/rest/condition/search/" + term.replaceAll(" ", "%20");
-            } else {
-
+            } else if (bundle.containsKey(BundleKey.CONDITION_LIST_KEY)){
+                list = (List) bundle.getSerializable(BundleKey.CONDITION_LIST_KEY);
             }
         }
     }
@@ -148,6 +149,8 @@ public class ConditionFragment extends Fragment {
             try {
                 URL url = new URL(urls[0]);
                 URLConnection conn = url.openConnection();
+                conn.addRequestProperty("Cache-Control", "max-stale=" + 60 * 60);
+                conn.setUseCaches(true);
                 InputStream in = conn.getInputStream();
                 BufferedReader br = new BufferedReader(new InputStreamReader(in));
                 String val = br.readLine();

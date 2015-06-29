@@ -1,5 +1,6 @@
 package nz.ac.aucklanduni.eyeatlas.activities;
 
+import android.app.AlertDialog;
 import android.app.Fragment;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -97,6 +98,8 @@ public class IndexFragment extends Fragment {
             try {
                 URL url = new URL(urls[0]);
                 URLConnection conn = url.openConnection();
+                conn.addRequestProperty("Cache-Control", "max-stale=" + 60 * 60);
+                conn.setUseCaches(true);
                 InputStream in = conn.getInputStream();
                 BufferedReader br = new BufferedReader(new InputStreamReader(in));
                 String val = br.readLine();
@@ -115,6 +118,11 @@ public class IndexFragment extends Fragment {
         protected void onPostExecute(List<Category> list) {
             if (list == null) {
                 list = new ArrayList<>();
+                AlertDialog.Builder alert = new AlertDialog.Builder(IndexFragment.this.getActivity());
+                alert.setTitle("Error");
+                alert.setMessage("Cannot contact remote server. Please try again later.");
+                alert.setPositiveButton("OK", null);
+                alert.show();
             }
 
             IndexFragment.this.list = list;
