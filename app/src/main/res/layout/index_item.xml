@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<com.balysv.materialripple.MaterialRippleLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/ripple"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:mrl_rippleColor="@color/grey_500"
+    app:mrl_rippleAlpha="0.1">
+
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:clickable="true"
+        android:clipChildren="true"
+        android:padding="20dp">
+
+        <Button
+            android:id="@+id/infoBtn"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:background="@drawable/round_btn"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:textColor="@color/textLight"
+            android:text="i"
+            android:textAllCaps="false"
+            android:fontFamily="sans-serf-medium"
+            android:textAlignment="center"
+            android:elevation="4dp"/>
+
+        <TextView
+            android:id="@+id/text"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_toLeftOf="@id/infoBtn"
+            android:textSize="18sp"
+            android:textColor="@color/textDark"
+            android:fontFamily="sans-serf-thin"
+            android:gravity="left"
+            android:paddingRight="10dp"
+            android:layout_centerVertical="true"/>
+
+    </RelativeLayout>
+</com.balysv.materialripple.MaterialRippleLayout>

@@ -7,7 +7,7 @@ import android.view.View;
 import android.widget.AdapterView;
 
 import nz.ac.aucklanduni.eyeatlas.R;
-import nz.ac.aucklanduni.eyeatlas.activities.GalleryFragment;
+import nz.ac.aucklanduni.eyeatlas.activities.ConditionFragment;
 import nz.ac.aucklanduni.eyeatlas.activities.IndexFragment;
 
 public class NavigationDrawerListListener implements AdapterView.OnItemClickListener {
@@ -25,8 +25,8 @@ public class NavigationDrawerListListener implements AdapterView.OnItemClickList
 
         switch (position) {
             case 0:
-                GalleryFragment galleryFragment = new GalleryFragment();
-                activity.getFragmentManager().beginTransaction().replace(R.id.fragment_container, galleryFragment).addToBackStack(null).commit();
+                ConditionFragment conditionFragment = new ConditionFragment();
+                activity.getFragmentManager().beginTransaction().replace(R.id.fragment_container, conditionFragment).addToBackStack(null).commit();
                 drawer.closeDrawers();
                 break;
             case 1:

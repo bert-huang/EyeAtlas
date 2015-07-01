@@ -10,19 +10,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.List;
 
 import nz.ac.aucklanduni.eyeatlas.R;
-import nz.ac.aucklanduni.eyeatlas.activities.GalleryFragment;
+import nz.ac.aucklanduni.eyeatlas.activities.ConditionFragment;
 import nz.ac.aucklanduni.eyeatlas.activities.IndexFragment;
 import nz.ac.aucklanduni.eyeatlas.model.BundleKey;
 import nz.ac.aucklanduni.eyeatlas.model.Category;
-import nz.ac.aucklanduni.eyeatlas.model.Condition;
 
 public class CategoryAdapter extends ArrayAdapter<Category> {
 
@@ -40,7 +36,7 @@ public class CategoryAdapter extends ArrayAdapter<Category> {
 
         if (convertView == null) {
             LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            convertView = inflater.inflate(R.layout.category_item, parent, false);
+            convertView = inflater.inflate(R.layout.index_item, parent, false);
 
             viewHolder = new ViewHolderItem();
             viewHolder.infoBtn = (Button) convertView.findViewById(R.id.infoBtn);
@@ -102,11 +98,11 @@ public class CategoryAdapter extends ArrayAdapter<Category> {
             List<Category> children = CategoryAdapter.this.getItem(position).getChildren();
 
             if (children.isEmpty()) {
-                GalleryFragment galleryFragment = new GalleryFragment();
+                ConditionFragment conditionFragment = new ConditionFragment();
                 Bundle bundle = new Bundle();
                 bundle.putSerializable(BundleKey.CATEGORY_KEY, CategoryAdapter.this.getItem(position));
-                galleryFragment.setArguments(bundle);
-                CategoryAdapter.this.activity.getFragmentManager().beginTransaction().replace(R.id.fragment_container, galleryFragment).addToBackStack(null).commit();
+                conditionFragment.setArguments(bundle);
+                CategoryAdapter.this.activity.getFragmentManager().beginTransaction().replace(R.id.fragment_container, conditionFragment).addToBackStack(null).commit();
                 return;
             }
 

@@ -11,6 +11,9 @@ public class Condition implements Serializable {
     private String description;
     private Category category;
     private Set<Tag> tags = new HashSet<Tag>();
+    private Integer imageWidth;
+    private Integer imageHeight;
+
 
     public Integer getId() {
         return id;
@@ -43,5 +46,21 @@ public class Condition implements Serializable {
 
     public void setTags(Set<Tag> tags) {
         this.tags = tags;
+    }
+
+    public Integer getImageWidth() {
+        return imageWidth;
+    }
+
+    public void setImageWidth(Integer imageWidth) {
+        this.imageWidth = imageWidth;
+    }
+
+    public Integer getImageHeight() {
+        return imageHeight;
+    }
+
+    public void setImageHeight(Integer imageHeight) {
+        this.imageHeight = imageHeight;
     }
 }

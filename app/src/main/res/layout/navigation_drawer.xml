@@ -6,12 +6,12 @@
     android:layout_height="fill_parent"
     android:orientation="vertical"
     android:layout_gravity="left"
-    android:background="@color/white">
+    android:background="@color/bg">
 
     <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="178dp"
-        android:background="@color/colourPrimary900Dark"
+        android:background="@color/colourPrimaryExtraDark"
     android:orientation="vertical"
         android:weightSum="1">
 
@@ -29,7 +29,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="16dp"
-                android:textColor="@color/white"
+                android:textColor="@color/textLight"
                 android:text="Eye Atlas"
                 android:textSize="14sp"
                 android:textStyle="bold"
