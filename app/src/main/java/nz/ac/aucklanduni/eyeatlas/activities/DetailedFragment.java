@@ -22,6 +22,8 @@ import nz.ac.aucklanduni.eyeatlas.model.Condition;
 import nz.ac.aucklanduni.eyeatlas.model.Properties;
 import nz.ac.aucklanduni.eyeatlas.model.Tag;
 import nz.ac.aucklanduni.eyeatlas.util.AsyncTaskHandler;
+import nz.ac.aucklanduni.eyeatlas.util.CropBitmap;
+import nz.ac.aucklanduni.eyeatlas.util.DimensionProvider;
 import nz.ac.aucklanduni.eyeatlas.util.ImageLruCache;
 import nz.ac.aucklanduni.eyeatlas.util.S3ImageAdapter;
 
@@ -72,7 +74,7 @@ public class DetailedFragment extends Fragment {
                                    TextView description, TextView category, TextView tag, TextView id) {
 
         final String imageKey = S3ImageAdapter.getPreviewImageUrl(condition.getId());
-        final Bitmap bitmap = ImageLruCache.getInstance(getActivity()).getBitmapFromCache(imageKey);
+        Bitmap bitmap = ImageLruCache.getInstance(getActivity()).getBitmapFromCache(imageKey);
         if (bitmap != null) {
             imageView.setImageBitmap(bitmap);
         } else {
@@ -100,7 +102,6 @@ public class DetailedFragment extends Fragment {
                 Bitmap bmp = null;
                 try {
                     bmp = S3ImageAdapter.getPreviewImage(id, Properties.getInstance(DetailedFragment.this.getActivity()));
-
                     if (bmp != null) {
                         ImageLruCache.getInstance(DetailedFragment.this.getActivity()).addBitmapToCache(S3ImageAdapter.getPreviewImageUrl(id), bmp);
                     }

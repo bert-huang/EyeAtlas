@@ -2,12 +2,18 @@ package nz.ac.aucklanduni.eyeatlas.adapter;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Point;
 import android.os.AsyncTask;
+import android.util.Log;
+import android.util.TypedValue;
+import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -18,6 +24,8 @@ import java.util.List;
 import nz.ac.aucklanduni.eyeatlas.R;
 import nz.ac.aucklanduni.eyeatlas.model.Condition;
 import nz.ac.aucklanduni.eyeatlas.model.Properties;
+import nz.ac.aucklanduni.eyeatlas.util.CropBitmap;
+import nz.ac.aucklanduni.eyeatlas.util.DimensionProvider;
 import nz.ac.aucklanduni.eyeatlas.util.ImageLruCache;
 import nz.ac.aucklanduni.eyeatlas.util.S3ImageAdapter;
 
@@ -99,6 +107,7 @@ public class ConditionAdapter extends ArrayAdapter<Condition> {
             Bitmap bmp;
             try {
                 bmp = S3ImageAdapter.getThumbnail(id, Properties.getInstance(ConditionAdapter.this.getContext()));
+                bmp = CropBitmap.cropBitmap(bmp, DimensionProvider.getThumbnailWidth(getContext()), DimensionProvider.getThumbnailHeight(getContext()));
                 if(bmp != null) {
                     ImageLruCache.getInstance(getContext()).addBitmapToCache(S3ImageAdapter.getThumbnailUrl(id), bmp);
                 }
