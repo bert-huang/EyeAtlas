@@ -7,7 +7,9 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.widget.SearchView;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -38,26 +40,38 @@ import nz.ac.aucklanduni.eyeatlas.util.AsyncTaskHandler;
 public class ConditionFragment extends Fragment {
 
     private static Integer INTERVAL = 10;
+
+    private Toolbar toolbar;
+    private String toolbarTitle;
     private ConditionAdapter adapter;
     private List<Condition> list;
     private GridView grid;
     private LinearLayout progress;
+    private Role role;
 
     private AsyncTaskHandler asyncTaskHandler;
     private String url;
     private String term;
+
+    public enum Role {
+        GALLERY, SEARCH, CATEGORY
+    }
 
     @Override
     public void setArguments(Bundle bundle) {
         if (bundle != null) {
             if (bundle.containsKey(BundleKey.CATEGORY_KEY)) {
                 Category category = (Category) bundle.getSerializable(BundleKey.CATEGORY_KEY);
+                toolbarTitle = category.getName();
                 url = Properties.getInstance(this.getActivity()).getHerokuUrl() + "rest/condition/category/" + category.getId().replaceAll(" ", "%20");
+                role = Role.CATEGORY;
             } else if (bundle.containsKey(BundleKey.SEARCH_KEY)) {
                 term = (String) bundle.getSerializable(BundleKey.SEARCH_KEY);
-                list = (List) bundle.getSerializable(BundleKey.CONDITION_LIST_KEY);
+                toolbarTitle = term;
                 url = Properties.getInstance(this.getActivity()).getHerokuUrl() + "/rest/condition/search/" + term.replaceAll(" ", "%20");
-            } else if (bundle.containsKey(BundleKey.CONDITION_LIST_KEY)){
+                role = Role.SEARCH;
+            }
+            if (bundle.containsKey(BundleKey.CONDITION_LIST_KEY)){
                 list = (List) bundle.getSerializable(BundleKey.CONDITION_LIST_KEY);
             }
         }
@@ -79,13 +93,16 @@ public class ConditionFragment extends Fragment {
             outState.putSerializable(BundleKey.SEARCH_KEY, term);
         }
         outState.putSerializable(BundleKey.CONDITION_LIST_KEY, (Serializable) list);
-
     }
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        AsyncTaskHandler asyncTaskHandler = new AsyncTaskHandler();
+        asyncTaskHandler = new AsyncTaskHandler();
+
+        toolbar = (Toolbar) getActivity().findViewById(R.id.toolbar);
+        toolbarTitle = (toolbarTitle == null) ? "Gallery" : toolbarTitle;
+        toolbar.setTitle(toolbarTitle);
 
         // Repopulate search menu is search term exists
         SearchView searchView = ((MainActivity) this.getActivity()).getSearchView();
@@ -107,6 +124,7 @@ public class ConditionFragment extends Fragment {
             ConditionLoader task = new ConditionLoader();
             if (url == null) {
                 url = Properties.getInstance(this.getActivity()).getHerokuUrl() + "rest/condition/all/";
+                role = Role.GALLERY;
             }
             asyncTaskHandler.add(task);
             task.execute(url);
@@ -120,7 +138,10 @@ public class ConditionFragment extends Fragment {
                 Bundle bundle = new Bundle();
                 bundle.putSerializable(BundleKey.CONDITION_KEY, adapter.getItem(position));
                 detailedFragment.setArguments(bundle);
-                ConditionFragment.this.getFragmentManager().beginTransaction().replace(R.id.fragment_container, detailedFragment).addToBackStack(null).commit();
+
+                String fTag = Integer.toString(ConditionFragment.this.getFragmentManager().getBackStackEntryCount());
+                ConditionFragment.this.getFragmentManager().beginTransaction()
+                        .replace(R.id.fragment_container, detailedFragment, fTag).addToBackStack(fTag).commit();
             }
         });
 
@@ -193,4 +214,7 @@ public class ConditionFragment extends Fragment {
         }
     }
 
+    public Role getRole() {
+        return role;
+    }
 }

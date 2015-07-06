@@ -5,6 +5,7 @@ import android.app.Fragment;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -32,7 +33,9 @@ import nz.ac.aucklanduni.eyeatlas.model.Properties;
 import nz.ac.aucklanduni.eyeatlas.util.AsyncTaskHandler;
 
 public class IndexFragment extends Fragment {
+    private Toolbar toolbar;
     private CategoryAdapter adapter;
+    private String parentCategoryName;
     private List<Category> list;
     private LinearLayout progress;
     private ListView listView;
@@ -41,8 +44,14 @@ public class IndexFragment extends Fragment {
 
     @Override
     public void setArguments(Bundle bundle) {
-        if (bundle != null && bundle.containsKey(BundleKey.CATEGORY_KEY)) {
-            this.list = (List<Category>) bundle.getSerializable(BundleKey.CATEGORY_KEY);
+
+        if (bundle != null) {
+            if (bundle.containsKey(BundleKey.CATEGORY_KEY)) {
+                this.list = (List<Category>) bundle.getSerializable(BundleKey.CATEGORY_KEY);
+            }
+            if (bundle.containsKey(BundleKey.CATEGORY_PARENT_KEY)) {
+                this.parentCategoryName = (String) bundle.getSerializable(BundleKey.CATEGORY_PARENT_KEY);
+            }
         }
     }
 
@@ -59,7 +68,13 @@ public class IndexFragment extends Fragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
+        toolbar = (Toolbar) getActivity().findViewById(R.id.toolbar);
+        parentCategoryName = parentCategoryName == null ? "Index" : parentCategoryName;
+        toolbar.setTitle(parentCategoryName);
+
         asyncTaskHandler = new AsyncTaskHandler();
+
+
 
         if(list != null) {
             adapter = new CategoryAdapter(this.getActivity(), this.getId(), list);
@@ -148,19 +163,27 @@ public class IndexFragment extends Fragment {
             List<Category> children = IndexFragment.this.adapter.getItem(position).getChildren();
 
             if (children.isEmpty()) {
+
                 ConditionFragment conditionFragment = new ConditionFragment();
                 Bundle bundle = new Bundle();
                 bundle.putSerializable(BundleKey.CATEGORY_KEY, IndexFragment.this.adapter.getItem(position));
                 conditionFragment.setArguments(bundle);
-                IndexFragment.this.getFragmentManager().beginTransaction().replace(R.id.fragment_container, conditionFragment).addToBackStack(null).commit();
-                return;
-            }
 
-            IndexFragment indexFragment = new IndexFragment();
-            Bundle bundle = new Bundle();
-            bundle.putSerializable(BundleKey.CATEGORY_KEY, (java.io.Serializable) children);
-            indexFragment.setArguments(bundle);
-            IndexFragment.this.getFragmentManager().beginTransaction().replace(R.id.fragment_container, indexFragment).addToBackStack(null).commit();
+                String fTag = Integer.toString(IndexFragment.this.getFragmentManager().getBackStackEntryCount());
+                IndexFragment.this.getFragmentManager().beginTransaction()
+                        .replace(R.id.fragment_container, conditionFragment, fTag).addToBackStack(fTag).commit();
+            } else {
+
+                IndexFragment indexFragment = new IndexFragment();
+                Bundle bundle = new Bundle();
+                bundle.putSerializable(BundleKey.CATEGORY_PARENT_KEY, IndexFragment.this.adapter.getItem(position).getName());
+                bundle.putSerializable(BundleKey.CATEGORY_KEY, (java.io.Serializable) children);
+                indexFragment.setArguments(bundle);
+
+                String fTag = Integer.toString(IndexFragment.this.getFragmentManager().getBackStackEntryCount());
+                IndexFragment.this.getFragmentManager().beginTransaction()
+                        .replace(R.id.fragment_container, indexFragment, fTag).addToBackStack(fTag).commit();
+            }
         }
     }
 }

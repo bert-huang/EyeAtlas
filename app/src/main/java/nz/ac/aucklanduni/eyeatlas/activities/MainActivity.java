@@ -1,5 +1,8 @@
 package nz.ac.aucklanduni.eyeatlas.activities;
 
+import android.app.Fragment;
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.net.http.HttpResponseCache;
 import android.support.v4.widget.DrawerLayout;
 import android.os.Bundle;
@@ -11,10 +14,13 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AutoCompleteTextView;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.Field;
 
 import nz.ac.aucklanduni.eyeatlas.R;
 import nz.ac.aucklanduni.eyeatlas.adapter.NavigationDrawerListAdapter;
@@ -46,7 +52,9 @@ public class MainActivity extends AppCompatActivity {
         initialiseDrawer();
 
         ConditionFragment conditionFragment = new ConditionFragment();
-        this.getFragmentManager().beginTransaction().replace(R.id.fragment_container, conditionFragment).addToBackStack(null).commit();
+        String fTag = Integer.toString(MainActivity.this.getFragmentManager().getBackStackEntryCount());
+        this.getFragmentManager().beginTransaction()
+                .replace(R.id.fragment_container, conditionFragment, fTag).addToBackStack(fTag).commit();
     }
 
     public SearchView getSearchView() {
@@ -54,22 +62,32 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initialiseSearch(Menu menu) {
-        SearchView actionSearch = (SearchView) menu.findItem(R.id.action_search).getActionView();
-        searchView = actionSearch;
-        actionSearch.setSubmitButtonEnabled(true);
-        actionSearch.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+        searchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
+        searchView.setSubmitButtonEnabled(true);
+        searchView.setQueryHint("Search");
+        // text color
+        AutoCompleteTextView searchText = (AutoCompleteTextView) searchView.findViewById(android.support.v7.appcompat.R.id.search_src_text);
+        try {
+            Field mCursorDrawableRes = TextView.class.getDeclaredField("mCursorDrawableRes");
+            mCursorDrawableRes.setAccessible(true);
+            mCursorDrawableRes.set(searchText, 0); //This sets the cursor resource ID to 0 or @null which will make it visible on white background
+        } catch (Exception e) {}
+
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+
             @Override
             public boolean onQueryTextSubmit(String s) {
-                if (s != null && !s.equals("")) {
-                    ConditionFragment conditionFragment = new ConditionFragment();
-                    Bundle bundle = new Bundle();
-                    bundle.putSerializable(BundleKey.SEARCH_KEY, s);
-                    conditionFragment.setArguments(bundle);
-                    MainActivity.this.getFragmentManager().beginTransaction().replace(R.id.fragment_container, conditionFragment).addToBackStack(null).commit();
-                    return true;
-                } else {
-                    return false;
-                }
+                ConditionFragment conditionFragment = new ConditionFragment();
+                Bundle bundle = new Bundle();
+                bundle.putSerializable(BundleKey.SEARCH_KEY, s);
+                conditionFragment.setArguments(bundle);
+
+                String fTag = Integer.toString(MainActivity.this.getFragmentManager().getBackStackEntryCount());
+                FragmentTransaction tx = MainActivity.this.getFragmentManager().beginTransaction();
+                tx.setCustomAnimations(R.animator.slide_right_enter, R.animator.slide_left_exit, R.animator.slide_left_enter, R.animator.slide_right_exit);
+                tx.replace(R.id.fragment_container, conditionFragment, fTag).addToBackStack(fTag);
+                tx.commit();
+                return true;
             }
 
             @Override
@@ -127,8 +145,19 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         if(!searchView.isIconified()) {
-            searchView.setQuery("", false);
             searchView.setIconified(true);
+            searchView.setQuery("", false);
+
+            // Get the last fragment, if it is a condition fragment and main role is to display search results, then pop the search fragment
+            FragmentManager.BackStackEntry bse = getFragmentManager().getBackStackEntryAt(getFragmentManager().getBackStackEntryCount()-1);
+            Fragment fragment = getFragmentManager().findFragmentByTag(bse.getName());
+            if(fragment instanceof ConditionFragment) {
+                ConditionFragment conditionFragment = (ConditionFragment) fragment;
+                if (conditionFragment.getRole() == ConditionFragment.Role.SEARCH) {
+                    getFragmentManager().popBackStack();
+                }
+            }
+
         } else if (getFragmentManager().getBackStackEntryCount() > 1 ){
             getFragmentManager().popBackStack();
         } else {
