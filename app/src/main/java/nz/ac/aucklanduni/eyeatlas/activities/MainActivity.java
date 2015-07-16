@@ -13,8 +13,11 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ListView;
 
+import org.spongycastle.jce.provider.BouncyCastleProvider;
+
 import java.io.File;
 import java.io.IOException;
+import java.security.Security;
 
 import nz.ac.aucklanduni.eyeatlas.R;
 import nz.ac.aucklanduni.eyeatlas.adapter.NavigationDrawerListAdapter;
@@ -44,6 +47,7 @@ public class MainActivity extends AppCompatActivity {
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         initialiseDrawer();
+
 
         ConditionFragment conditionFragment = new ConditionFragment();
         this.getFragmentManager().beginTransaction().replace(R.id.fragment_container, conditionFragment).addToBackStack(null).commit();
@@ -134,6 +138,10 @@ public class MainActivity extends AppCompatActivity {
         } else {
             super.onBackPressed();
         }
+    }
+
+    static {
+        Security.insertProviderAt(new BouncyCastleProvider(), 1);
     }
 
 }
