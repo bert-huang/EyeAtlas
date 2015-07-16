@@ -2,9 +2,11 @@ package nz.ac.aucklanduni.eyeatlas.activities;
 
 import android.app.AlertDialog;
 import android.app.Fragment;
+import android.app.FragmentTransaction;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -32,7 +34,9 @@ import nz.ac.aucklanduni.eyeatlas.model.Properties;
 import nz.ac.aucklanduni.eyeatlas.util.AsyncTaskHandler;
 
 public class IndexFragment extends Fragment {
+    private Toolbar toolbar;
     private CategoryAdapter adapter;
+    private String parentCategoryName;
     private List<Category> list;
     private LinearLayout progress;
     private ListView listView;
@@ -41,8 +45,14 @@ public class IndexFragment extends Fragment {
 
     @Override
     public void setArguments(Bundle bundle) {
-        if (bundle != null && bundle.containsKey(BundleKey.CATEGORY_KEY)) {
-            this.list = (List<Category>) bundle.getSerializable(BundleKey.CATEGORY_KEY);
+
+        if (bundle != null) {
+            if (bundle.containsKey(BundleKey.CATEGORY_KEY)) {
+                this.list = (List<Category>) bundle.getSerializable(BundleKey.CATEGORY_KEY);
+            }
+            if (bundle.containsKey(BundleKey.CATEGORY_PARENT_KEY)) {
+                this.parentCategoryName = (String) bundle.getSerializable(BundleKey.CATEGORY_PARENT_KEY);
+            }
         }
     }
 
@@ -59,7 +69,13 @@ public class IndexFragment extends Fragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
+        toolbar = (Toolbar) getActivity().findViewById(R.id.toolbar);
+        parentCategoryName = parentCategoryName == null ? "Index" : parentCategoryName;
+        toolbar.setTitle(parentCategoryName);
+
         asyncTaskHandler = new AsyncTaskHandler();
+
+
 
         if(list != null) {
             adapter = new CategoryAdapter(this.getActivity(), this.getId(), list);
@@ -147,20 +163,30 @@ public class IndexFragment extends Fragment {
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
             List<Category> children = IndexFragment.this.adapter.getItem(position).getChildren();
 
+            Fragment fragment;
+
             if (children.isEmpty()) {
-                ConditionFragment conditionFragment = new ConditionFragment();
+
+                fragment = new ConditionFragment();
                 Bundle bundle = new Bundle();
                 bundle.putSerializable(BundleKey.CATEGORY_KEY, IndexFragment.this.adapter.getItem(position));
-                conditionFragment.setArguments(bundle);
-                IndexFragment.this.getFragmentManager().beginTransaction().replace(R.id.fragment_container, conditionFragment).addToBackStack(null).commit();
-                return;
+                fragment.setArguments(bundle);
+
+
+            } else {
+
+                fragment = new IndexFragment();
+                Bundle bundle = new Bundle();
+                bundle.putSerializable(BundleKey.CATEGORY_PARENT_KEY, IndexFragment.this.adapter.getItem(position).getName());
+                bundle.putSerializable(BundleKey.CATEGORY_KEY, (java.io.Serializable) children);
+                fragment.setArguments(bundle);
             }
 
-            IndexFragment indexFragment = new IndexFragment();
-            Bundle bundle = new Bundle();
-            bundle.putSerializable(BundleKey.CATEGORY_KEY, (java.io.Serializable) children);
-            indexFragment.setArguments(bundle);
-            IndexFragment.this.getFragmentManager().beginTransaction().replace(R.id.fragment_container, indexFragment).addToBackStack(null).commit();
+            String fTag = Integer.toString(IndexFragment.this.getFragmentManager().getBackStackEntryCount());
+            FragmentTransaction tx = IndexFragment.this.getFragmentManager().beginTransaction();
+            tx.setCustomAnimations(R.animator.slide_right_enter, R.animator.slide_left_exit, R.animator.slide_left_enter, R.animator.slide_right_exit);
+            tx.replace(R.id.fragment_container, fragment, fTag).addToBackStack(fTag);
+            tx.commit();
         }
     }
 }
