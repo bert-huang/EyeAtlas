@@ -2,6 +2,7 @@ package nz.ac.aucklanduni.eyeatlas.activities;
 
 import android.app.AlertDialog;
 import android.app.Fragment;
+import android.app.FragmentTransaction;
 import android.net.http.HttpResponseCache;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -140,8 +141,10 @@ public class ConditionFragment extends Fragment {
                 detailedFragment.setArguments(bundle);
 
                 String fTag = Integer.toString(ConditionFragment.this.getFragmentManager().getBackStackEntryCount());
-                ConditionFragment.this.getFragmentManager().beginTransaction()
-                        .replace(R.id.fragment_container, detailedFragment, fTag).addToBackStack(fTag).commit();
+                FragmentTransaction tx = ConditionFragment.this.getFragmentManager().beginTransaction();
+                tx.setCustomAnimations(R.animator.slide_right_enter, R.animator.slide_left_exit, R.animator.slide_left_enter, R.animator.slide_right_exit);
+                tx.replace(R.id.fragment_container, detailedFragment, fTag).addToBackStack(fTag);
+                tx.commit();
             }
         });
 

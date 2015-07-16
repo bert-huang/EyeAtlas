@@ -145,8 +145,9 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         if(!searchView.isIconified()) {
-            searchView.setIconified(true);
             searchView.setQuery("", false);
+            searchView.clearFocus();
+            searchView.setIconified(true);
 
             // Get the last fragment, if it is a condition fragment and main role is to display search results, then pop the search fragment
             FragmentManager.BackStackEntry bse = getFragmentManager().getBackStackEntryAt(getFragmentManager().getBackStackEntryCount()-1);

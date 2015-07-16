@@ -2,6 +2,7 @@ package nz.ac.aucklanduni.eyeatlas.activities;
 
 import android.app.AlertDialog;
 import android.app.Fragment;
+import android.app.FragmentTransaction;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
@@ -162,28 +163,30 @@ public class IndexFragment extends Fragment {
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
             List<Category> children = IndexFragment.this.adapter.getItem(position).getChildren();
 
+            Fragment fragment;
+
             if (children.isEmpty()) {
 
-                ConditionFragment conditionFragment = new ConditionFragment();
+                fragment = new ConditionFragment();
                 Bundle bundle = new Bundle();
                 bundle.putSerializable(BundleKey.CATEGORY_KEY, IndexFragment.this.adapter.getItem(position));
-                conditionFragment.setArguments(bundle);
+                fragment.setArguments(bundle);
 
-                String fTag = Integer.toString(IndexFragment.this.getFragmentManager().getBackStackEntryCount());
-                IndexFragment.this.getFragmentManager().beginTransaction()
-                        .replace(R.id.fragment_container, conditionFragment, fTag).addToBackStack(fTag).commit();
+
             } else {
 
-                IndexFragment indexFragment = new IndexFragment();
+                fragment = new IndexFragment();
                 Bundle bundle = new Bundle();
                 bundle.putSerializable(BundleKey.CATEGORY_PARENT_KEY, IndexFragment.this.adapter.getItem(position).getName());
                 bundle.putSerializable(BundleKey.CATEGORY_KEY, (java.io.Serializable) children);
-                indexFragment.setArguments(bundle);
-
-                String fTag = Integer.toString(IndexFragment.this.getFragmentManager().getBackStackEntryCount());
-                IndexFragment.this.getFragmentManager().beginTransaction()
-                        .replace(R.id.fragment_container, indexFragment, fTag).addToBackStack(fTag).commit();
+                fragment.setArguments(bundle);
             }
+
+            String fTag = Integer.toString(IndexFragment.this.getFragmentManager().getBackStackEntryCount());
+            FragmentTransaction tx = IndexFragment.this.getFragmentManager().beginTransaction();
+            tx.setCustomAnimations(R.animator.slide_right_enter, R.animator.slide_left_exit, R.animator.slide_left_enter, R.animator.slide_right_exit);
+            tx.replace(R.id.fragment_container, fragment, fTag).addToBackStack(fTag);
+            tx.commit();
         }
     }
 }
