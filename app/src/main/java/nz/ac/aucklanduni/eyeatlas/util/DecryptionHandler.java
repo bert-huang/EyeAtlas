@@ -120,11 +120,12 @@ public class DecryptionHandler {
 
             Cipher cipher = Cipher.getInstance(transformation);
             SecretKeySpec secretKey = new SecretKeySpec(DecryptionHandler.getInstance().KEY.getBytes(), algorithm);
+            IvParameterSpec ivSpec = new IvParameterSpec(DecryptionHandler.getInstance().IV.getBytes());
 
             /**
              * Initialize the cipher for decrytion
              */
-            cipher.init(Cipher.DECRYPT_MODE, secretKey);
+            cipher.init(Cipher.DECRYPT_MODE, secretKey, ivSpec);
             /**
              * Initialize input and output streams
             */
@@ -154,6 +155,8 @@ public class DecryptionHandler {
         } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
         } catch (NoSuchPaddingException e) {
+            e.printStackTrace();
+        } catch (InvalidAlgorithmParameterException e) {
             e.printStackTrace();
         }
 
