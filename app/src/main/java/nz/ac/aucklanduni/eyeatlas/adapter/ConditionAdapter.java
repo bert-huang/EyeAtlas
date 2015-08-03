@@ -17,7 +17,8 @@ import java.util.List;
 
 import nz.ac.aucklanduni.eyeatlas.R;
 import nz.ac.aucklanduni.eyeatlas.model.Condition;
-import nz.ac.aucklanduni.eyeatlas.model.Properties;
+import nz.ac.aucklanduni.eyeatlas.model.S3Properties;
+import nz.ac.aucklanduni.eyeatlas.util.DecryptionHandler;
 import nz.ac.aucklanduni.eyeatlas.util.ImageLruCache;
 import nz.ac.aucklanduni.eyeatlas.util.S3ImageAdapter;
 
@@ -96,9 +97,18 @@ public class ConditionAdapter extends ArrayAdapter<Condition> {
 
         @Override
         protected Bitmap doInBackground(Void... avoid) {
+
+            while(!DecryptionHandler.READY) {
+                try {
+                    Thread.sleep(500);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+
             Bitmap bmp;
             try {
-                bmp = S3ImageAdapter.getThumbnail(id, Properties.getInstance(ConditionAdapter.this.getContext()));
+                bmp = S3ImageAdapter.getThumbnail(id, S3Properties.getInstance(ConditionAdapter.this.getContext()));
                 if(bmp != null) {
                     ImageLruCache.getInstance(getContext()).addBitmapToCache(S3ImageAdapter.getThumbnailUrl(id), bmp);
                 }

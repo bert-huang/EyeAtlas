@@ -46,10 +46,9 @@ public class ImageViewerActivity extends Activity {
         imageSizeX = condition.getImageWidth();
 
         tileView = new TileView( this );
-        tileView.setCacheEnabled( true );
+        tileView.setCacheEnabled( false );
         setContentView( tileView );
         tileView.setBackgroundColor(Color.BLACK);
-        //tileView.disableSuppress();
         tileView.setDecoder(new EyeAtlasDecoder());
 
         // size of original image at 100% scale

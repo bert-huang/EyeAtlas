@@ -6,13 +6,7 @@ import android.graphics.BitmapFactory;
 
 import com.qozix.tileview.graphics.BitmapDecoder;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
-
-import nz.ac.aucklanduni.eyeatlas.model.Properties;
+import nz.ac.aucklanduni.eyeatlas.model.S3Properties;
 import nz.ac.aucklanduni.eyeatlas.util.S3ImageAdapter;
 
 public class EyeAtlasDecoder implements BitmapDecoder {
@@ -24,6 +18,6 @@ public class EyeAtlasDecoder implements BitmapDecoder {
 
     @Override
     public Bitmap decode(String fileName, Context context) {
-        return  S3ImageAdapter.getTile(fileName, Properties.getInstance(context));
+        return  S3ImageAdapter.getTile(fileName, S3Properties.getInstance(context));
     }
 }

@@ -27,7 +27,7 @@ public class ImageLruCache {
     private DiskLruCache mDiskLruCache;
     private final Object mDiskCacheLock = new Object();
     private boolean mDiskCacheStarting = true;
-    private static final long DISK_CACHE_SIZE = 1024 * 1024 * 10; // 10MB
+    private static final long DISK_CACHE_SIZE = 1024 * 1024 * 20; // 20MB
     private static final String DISK_CACHE_SUBDIR = "s3_images";
     private static final int IO_BUFFER_SIZE = 8 * 1024;
     private static final int COMPRESSION_QUALITY = 80;

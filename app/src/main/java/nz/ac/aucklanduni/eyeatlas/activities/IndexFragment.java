@@ -28,7 +28,9 @@ import nz.ac.aucklanduni.eyeatlas.R;
 import nz.ac.aucklanduni.eyeatlas.adapter.CategoryAdapter;
 import nz.ac.aucklanduni.eyeatlas.model.BundleKey;
 import nz.ac.aucklanduni.eyeatlas.model.Category;
-import nz.ac.aucklanduni.eyeatlas.model.Properties;
+import nz.ac.aucklanduni.eyeatlas.model.EyeAtlas;
+import nz.ac.aucklanduni.eyeatlas.model.HerokuProperties;
+import nz.ac.aucklanduni.eyeatlas.model.S3Properties;
 import nz.ac.aucklanduni.eyeatlas.util.AsyncTaskHandler;
 
 public class IndexFragment extends Fragment {
@@ -66,7 +68,7 @@ public class IndexFragment extends Fragment {
             listView.setAdapter(adapter);
         } else {
             CategoryLoader task = new CategoryLoader();
-            String url = Properties.getInstance(IndexFragment.this.getActivity()).getHerokuUrl() + "rest/category";
+            String url = HerokuProperties.getInstance().getUrl() + "rest/category";
             Log.w("XEYE", url);
             asyncTaskHandler.add(task);
             task.execute(url);

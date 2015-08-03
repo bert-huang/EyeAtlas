@@ -23,6 +23,7 @@ import nz.ac.aucklanduni.eyeatlas.R;
 import nz.ac.aucklanduni.eyeatlas.adapter.NavigationDrawerListAdapter;
 import nz.ac.aucklanduni.eyeatlas.listeners.NavigationDrawerListListener;
 import nz.ac.aucklanduni.eyeatlas.model.BundleKey;
+import nz.ac.aucklanduni.eyeatlas.util.DecryptionHandler;
 
 public class MainActivity extends AppCompatActivity {
     private Toolbar toolbar;
@@ -35,6 +36,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.main_activity);
+        DecryptionHandler.getInstance();
 
         try {
             File httpCacheDir = new File(this.getCacheDir(), "http");
@@ -47,7 +49,6 @@ public class MainActivity extends AppCompatActivity {
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         initialiseDrawer();
-
 
         ConditionFragment conditionFragment = new ConditionFragment();
         this.getFragmentManager().beginTransaction().replace(R.id.fragment_container, conditionFragment).addToBackStack(null).commit();

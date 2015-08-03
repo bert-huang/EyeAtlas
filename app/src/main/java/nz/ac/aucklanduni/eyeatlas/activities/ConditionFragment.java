@@ -2,7 +2,7 @@ package nz.ac.aucklanduni.eyeatlas.activities;
 
 import android.app.AlertDialog;
 import android.app.Fragment;
-import android.net.http.HttpResponseCache;
+import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
@@ -32,7 +32,9 @@ import nz.ac.aucklanduni.eyeatlas.adapter.ConditionAdapter;
 import nz.ac.aucklanduni.eyeatlas.model.BundleKey;
 import nz.ac.aucklanduni.eyeatlas.model.Category;
 import nz.ac.aucklanduni.eyeatlas.model.Condition;
-import nz.ac.aucklanduni.eyeatlas.model.Properties;
+import nz.ac.aucklanduni.eyeatlas.model.EyeAtlas;
+import nz.ac.aucklanduni.eyeatlas.model.HerokuProperties;
+import nz.ac.aucklanduni.eyeatlas.model.S3Properties;
 import nz.ac.aucklanduni.eyeatlas.util.AsyncTaskHandler;
 
 public class ConditionFragment extends Fragment {
@@ -52,11 +54,11 @@ public class ConditionFragment extends Fragment {
         if (bundle != null) {
             if (bundle.containsKey(BundleKey.CATEGORY_KEY)) {
                 Category category = (Category) bundle.getSerializable(BundleKey.CATEGORY_KEY);
-                url = Properties.getInstance(this.getActivity()).getHerokuUrl() + "rest/condition/category/" + category.getId().replaceAll(" ", "%20");
+                url = HerokuProperties.getInstance().getUrl() + "rest/condition/category/" + category.getId().replaceAll(" ", "%20");
             } else if (bundle.containsKey(BundleKey.SEARCH_KEY)) {
                 term = (String) bundle.getSerializable(BundleKey.SEARCH_KEY);
                 list = (List) bundle.getSerializable(BundleKey.CONDITION_LIST_KEY);
-                url = Properties.getInstance(this.getActivity()).getHerokuUrl() + "/rest/condition/search/" + term.replaceAll(" ", "%20");
+                url = HerokuProperties.getInstance().getUrl() + "/rest/condition/search/" + term.replaceAll(" ", "%20");
             } else if (bundle.containsKey(BundleKey.CONDITION_LIST_KEY)){
                 list = (List) bundle.getSerializable(BundleKey.CONDITION_LIST_KEY);
             }
@@ -85,7 +87,7 @@ public class ConditionFragment extends Fragment {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        AsyncTaskHandler asyncTaskHandler = new AsyncTaskHandler();
+        asyncTaskHandler = new AsyncTaskHandler();
 
         // Repopulate search menu is search term exists
         SearchView searchView = ((MainActivity) this.getActivity()).getSearchView();
@@ -106,7 +108,7 @@ public class ConditionFragment extends Fragment {
         } else {
             ConditionLoader task = new ConditionLoader();
             if (url == null) {
-                url = Properties.getInstance(this.getActivity()).getHerokuUrl() + "rest/condition/all/";
+                url = HerokuProperties.getInstance().getUrl() + "rest/condition/all/";
             }
             asyncTaskHandler.add(task);
             task.execute(url);
@@ -149,7 +151,7 @@ public class ConditionFragment extends Fragment {
             try {
                 URL url = new URL(urls[0]);
                 URLConnection conn = url.openConnection();
-                conn.addRequestProperty("Cache-Control", "max-stale=" + 60 * 60);
+                conn.addRequestProperty("Cache-Control", "max-stale=" + 20 * 60);
                 conn.setUseCaches(true);
                 InputStream in = conn.getInputStream();
                 BufferedReader br = new BufferedReader(new InputStreamReader(in));

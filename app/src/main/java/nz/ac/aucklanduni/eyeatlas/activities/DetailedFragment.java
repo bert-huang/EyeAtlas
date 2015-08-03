@@ -19,7 +19,7 @@ import com.melnykov.fab.FloatingActionButton;
 import nz.ac.aucklanduni.eyeatlas.R;
 import nz.ac.aucklanduni.eyeatlas.model.BundleKey;
 import nz.ac.aucklanduni.eyeatlas.model.Condition;
-import nz.ac.aucklanduni.eyeatlas.model.Properties;
+import nz.ac.aucklanduni.eyeatlas.model.S3Properties;
 import nz.ac.aucklanduni.eyeatlas.model.Tag;
 import nz.ac.aucklanduni.eyeatlas.util.AsyncTaskHandler;
 import nz.ac.aucklanduni.eyeatlas.util.ImageLruCache;
@@ -99,7 +99,7 @@ public class DetailedFragment extends Fragment {
             protected Bitmap doInBackground(Object... params) {
                 Bitmap bmp = null;
                 try {
-                    bmp = S3ImageAdapter.getPreviewImage(id, Properties.getInstance(DetailedFragment.this.getActivity()));
+                    bmp = S3ImageAdapter.getPreviewImage(id, S3Properties.getInstance(DetailedFragment.this.getActivity()));
 
                     if (bmp != null) {
                         ImageLruCache.getInstance(DetailedFragment.this.getActivity()).addBitmapToCache(S3ImageAdapter.getPreviewImageUrl(id), bmp);

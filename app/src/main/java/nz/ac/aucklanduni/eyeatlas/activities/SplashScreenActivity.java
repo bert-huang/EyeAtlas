@@ -2,14 +2,11 @@ package nz.ac.aucklanduni.eyeatlas.activities;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.media.Image;
 import android.os.Bundle;
 import android.os.Handler;
 
 import nz.ac.aucklanduni.eyeatlas.R;
-import nz.ac.aucklanduni.eyeatlas.model.EyeAtlas;
-import nz.ac.aucklanduni.eyeatlas.util.DecodeKeyHandler;
-import nz.ac.aucklanduni.eyeatlas.util.ImageLruCache;
+import nz.ac.aucklanduni.eyeatlas.util.DecryptionHandler;
 
 public class SplashScreenActivity extends Activity {
 
@@ -39,7 +36,5 @@ public class SplashScreenActivity extends Activity {
                 finish();
             }
         }, SPLASH_TIME_OUT);
-
-        DecodeKeyHandler.getInstance(EyeAtlas.getAppContext());
     }
 }
