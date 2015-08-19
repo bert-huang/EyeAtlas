@@ -25,15 +25,8 @@
         </ProgressBar>
     </LinearLayout>
 
-    <!--<LinearLayout-->
-        <!--android:id="@+id/cardContentContainer"-->
-        <!--android:layout_width="fill_parent"-->
-        <!--android:layout_height="fill_parent"-->
-        <!--android:gravity="center"-->
-        <!--android:orientation="vertical">-->
-
         <ImageView
-            android:scaleType="fitXY"
+            android:scaleType="centerCrop"
             android:layout_width="match_parent"
             android:layout_height="180dp"
             android:id="@+id/cardImage"

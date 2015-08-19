@@ -16,25 +16,38 @@
         android:clipChildren="true"
         android:padding="20dp">
 
-        <Button
-            android:id="@+id/infoBtn"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
-            android:background="@drawable/round_btn"
+        <FrameLayout
+            android:id="@+id/btnContainer"
+            android:layout_width="60dp"
+            android:layout_height="match_parent"
             android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:textColor="@color/textLight"
-            android:text="i"
-            android:textAllCaps="false"
-            android:fontFamily="sans-serf-medium"
-            android:textAlignment="center"
-            android:elevation="4dp"/>
+            android:layout_centerVertical="true">
+            <ImageButton
+                android:id="@+id/infoBtn"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:background="@null"
+                android:src="@drawable/round_btn" >
+            </ImageButton>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:clickable="false"
+                android:text="i"
+                android:textColor="@color/textLight"
+                android:textAllCaps="false"
+                android:fontFamily="sans-serf-medium"
+                android:textAlignment="center">
+            </TextView>
+        </FrameLayout>
 
         <TextView
             android:id="@+id/text"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_toLeftOf="@id/infoBtn"
+            android:layout_toLeftOf="@id/btnContainer"
             android:textSize="18sp"
             android:textColor="@color/textDark"
             android:fontFamily="sans-serf-thin"
