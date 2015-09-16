@@ -7,6 +7,8 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v7.widget.SearchView;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -42,6 +44,9 @@ public class DetailedFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, final ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
         asyncTaskHandler = new AsyncTaskHandler();
+
+        SearchView searchView = ((MainActivity) this.getActivity()).getSearchView();
+        searchView.clearFocus();
 
         View view = inflater.inflate(R.layout.detail_fragment, container, false);
         progress = (LinearLayout) view.findViewById(R.id.progressBarContainer);
@@ -144,6 +149,14 @@ public class DetailedFragment extends Fragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
+
+        SearchView searchView = ((MainActivity) this.getActivity()).getSearchView();
+        if(!searchView.isIconified()) {
+            searchView.setQuery("", false);
+            searchView.clearFocus();
+            searchView.setIconified(true);
+        }
+
         if (asyncTaskHandler != null) {
             asyncTaskHandler.purgeAll();
         }

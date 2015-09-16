@@ -10,6 +10,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageButton;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import java.util.List;
@@ -39,7 +41,7 @@ public class CategoryAdapter extends ArrayAdapter<Category> {
             convertView = inflater.inflate(R.layout.index_item, parent, false);
 
             viewHolder = new ViewHolderItem();
-            viewHolder.infoBtn = (Button) convertView.findViewById(R.id.infoBtn);
+            viewHolder.infoBtn = (ImageButton) convertView.findViewById(R.id.infoBtn);
             viewHolder.textView = (TextView) convertView.findViewById(R.id.text);
 
             convertView.setTag(viewHolder);
@@ -59,7 +61,7 @@ public class CategoryAdapter extends ArrayAdapter<Category> {
      */
     static class ViewHolderItem {
         TextView textView;
-        Button infoBtn;
+        ImageButton infoBtn;
     }
 
     class OnCategoryInfoClick implements View.OnClickListener {
