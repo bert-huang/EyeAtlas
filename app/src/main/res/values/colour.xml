@@ -15,6 +15,7 @@
     <item name="white" type="color">#FFFFFFFF</item>
     <item name="black" type="color">#FF000000</item>
     <item name="transparent_black" type="color">#BB000000</item>
+    <item name="textLightTrans" type="color">#66F5F5F5</item>
 
     <item name="blue_50" type="color">#E3F2FD</item>
     <item name="blue_100" type="color">#BBDEFB</item>
