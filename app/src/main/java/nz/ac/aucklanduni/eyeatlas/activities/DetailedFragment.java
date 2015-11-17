@@ -56,10 +56,8 @@ public class DetailedFragment extends Fragment {
         TextView title = (TextView) view.findViewById(R.id.detail_title);
         TextView description = (TextView) view.findViewById(R.id.detail_description);
         TextView category = (TextView) view.findViewById(R.id.detail_category);
-        TextView tag = (TextView) view.findViewById(R.id.detail_tag);
-        TextView id = (TextView) view.findViewById(R.id.detail_id);
 
-        initialiseContent(condition, imageView, title, description, category, tag, id);
+        initialiseContent(condition, imageView, title, description, category);
 
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -74,7 +72,7 @@ public class DetailedFragment extends Fragment {
     }
 
     private void initialiseContent(Condition condition, ImageView imageView, TextView title,
-                                   TextView description, TextView category, TextView tag, TextView id) {
+                                   TextView description, TextView category) {
 
         final String imageKey = S3ImageAdapter.getPreviewImageUrl(condition.getId());
         final Bitmap bitmap = ImageLruCache.getInstance(getActivity()).getBitmapFromCache(imageKey);
@@ -87,15 +85,6 @@ public class DetailedFragment extends Fragment {
         title.setText(condition.getTitle());
         description.setText(condition.getDescription());
         category.setText(condition.getCategory().getName());
-        id.setText(condition.getId().toString());
-        StringBuffer sb = new StringBuffer();
-
-        for (Tag t : condition.getTags()) {
-            sb.append(t.getName());
-            sb.append(", ");
-        }
-        sb.delete(sb.length()-2, sb.length());
-        tag.setText(sb.toString());
     }
 
     private void fetchImage(final int id, final ImageView imageView) {
