@@ -7,11 +7,19 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
+import android.media.Image;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 
+import com.qozix.animation.easing.Linear;
 import com.qozix.tileview.TileView;
 
 import java.io.FileInputStream;
@@ -21,6 +29,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.Serializable;
 
+import nz.ac.aucklanduni.eyeatlas.R;
 import nz.ac.aucklanduni.eyeatlas.graphics.EyeAtlasDecoder;
 import nz.ac.aucklanduni.eyeatlas.model.BundleKey;
 import nz.ac.aucklanduni.eyeatlas.model.Condition;
@@ -42,18 +51,29 @@ public class ImageViewerActivity extends Activity {
         Bundle bundle = this.getIntent().getExtras();
         Condition condition = (Condition) bundle.getSerializable(BundleKey.CONDITION_KEY);
 
+        RelativeLayout relativeLayout = new RelativeLayout( this );
+        TextView watermk = new TextView(this);
+        watermk.setText(getResources().getString(R.string.watermark));
+        watermk.setTextSize(18);
+        watermk.setTextColor(getResources().getColor(R.color.textLightTrans));
+        RelativeLayout.LayoutParams logoLayoutParams = new RelativeLayout.LayoutParams( ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT );
+        logoLayoutParams.addRule(RelativeLayout.CENTER_IN_PARENT);
+        relativeLayout.addView(watermk, logoLayoutParams);
+
+
         imageSizeY = condition.getImageHeight();
         imageSizeX = condition.getImageWidth();
 
         tileView = new TileView( this );
-        tileView.setCacheEnabled( true );
+        tileView.addView( relativeLayout );
+        tileView.setCacheEnabled(true);
         setContentView( tileView );
         tileView.setBackgroundColor(Color.BLACK);
         //tileView.disableSuppress();
         tileView.setDecoder(new EyeAtlasDecoder());
 
         // size of original image at 100% scale
-        tileView.setSize(imageSizeX, imageSizeY );
+        tileView.setSize(imageSizeX, imageSizeY);
 
         String previewFile = condition.getId().toString() + "/preview/preview.jpg";
 
@@ -61,16 +81,20 @@ public class ImageViewerActivity extends Activity {
         // detail levels
         tileView.addDetailLevel( 1.000f, condition.getId().toString() + "/1000/img_%col%_%row%.jpg", previewFile, 2000, 2000);
         tileView.addDetailLevel( 0.750f, condition.getId().toString() + "/500/img_%col%_%row%.jpg", previewFile, 2000, 2000);
-        tileView.addDetailLevel( 0.500f, condition.getId().toString() + "/250/img_%col%_%row%.jpg", previewFile, 2000, 2000);
-        tileView.addDetailLevel( 0.250f, condition.getId().toString() + "/125/img_%col%_%row%.jpg", previewFile, 2000, 2000);
+        tileView.addDetailLevel(0.500f, condition.getId().toString() + "/250/img_%col%_%row%.jpg", previewFile, 2000, 2000);
+        tileView.addDetailLevel(0.250f, condition.getId().toString() + "/125/img_%col%_%row%.jpg", previewFile, 2000, 2000);
+
 
         // allow scaling past original size
-        tileView.setScaleLimits( 0, 2 );
+        tileView.setScaleLimits(0, 4);
 
         frameTo(imageSizeX / 2, imageSizeY / 2);
 
         // scale down a little
         tileView.setScale( IMAGE_SCALE );
+
+
+
 
     }
 

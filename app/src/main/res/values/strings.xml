@@ -12,6 +12,8 @@
     <string name="category">Category</string>
     <string name="id">ID</string>
 
+    <string name="watermark">University of Auckland</string>
+
 
     <string-array name="nav_drawer_list">
         <item>@string/gallery</item>
